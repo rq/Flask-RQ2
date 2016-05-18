@@ -1,0 +1,12 @@
+[run]
+branch = True
+source = flask_rq2
+
+[paths]
+source =
+   src/flask_rq2
+   .tox/*/lib/python*/site-packages/flask_rq2
+   .tox/pypy*/site-packages/flask_rq2
+
+[report]
+show_missing = True

@@ -1,0 +1,4 @@
+include LICENSE AUTHORS CHANGELOG.rst README.rst
+include .bumpversion.cfg .coveragerc .travis.yml pytest.ini tox.ini
+include docs/*.rst docs/*.py docs/Makefile docs/_templates/*.html
+include tests/*.py

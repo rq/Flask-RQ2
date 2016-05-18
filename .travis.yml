@@ -1,0 +1,36 @@
+language: python
+python: '3.5'
+sudo: false
+env:
+  matrix:
+    - TOXENV=py27-lowest
+    - TOXENV=py27-latest
+    - TOXENV=py27-devel
+    - TOXENV=py34-lowest
+    - TOXENV=py34-latest
+    - TOXENV=py34-devel
+    - TOXENV=py35-lowest
+    - TOXENV=py35-latest
+    - TOXENV=py35-devel
+    - TOXENV=docs
+    - TOXENV=readme
+    - TOXENV=manifest
+before_install:
+  - python --version
+  - uname -a
+  - lsb_release -a
+install:
+  - pip install tox
+  - virtualenv --version
+  - easy_install --version
+  - pip --version
+  - tox --version
+script:
+  - tox -v
+after_failure:
+  - more .tox/log/* | cat
+  - more .tox/*/log/* | cat
+notifications:
+  email:
+    on_success: never
+    on_failure: always
