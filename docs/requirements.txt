@@ -1,0 +1,4 @@
+sphinx
+sphinx-readable-theme
+-e ..[cli]
+-e ..[script]
