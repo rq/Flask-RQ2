@@ -20,13 +20,15 @@ before_install:
   - uname -a
   - lsb_release -a
 install:
-  - pip install tox
+  - pip install codecov tox
   - virtualenv --version
   - easy_install --version
   - pip --version
   - tox --version
 script:
   - tox -v
+after_success:
+  - codecov
 after_failure:
   - more .tox/log/* | cat
   - more .tox/*/log/* | cat
