@@ -2,39 +2,49 @@ language: python
 python: '3.5'
 sudo: false
 services:
-  - redis-server
+- redis-server
 env:
   matrix:
-    - TOXENV=py27-lowest
-    - TOXENV=py27-latest
-    - TOXENV=py27-devel
-    - TOXENV=py34-lowest
-    - TOXENV=py34-latest
-    - TOXENV=py34-devel
-    - TOXENV=py35-lowest
-    - TOXENV=py35-latest
-    - TOXENV=py35-devel
-    - TOXENV=docs
-    - TOXENV=readme
-    - TOXENV=manifest
+  - TOXENV=py27-lowest
+  - TOXENV=py27-latest
+  - TOXENV=py27-devel
+  - TOXENV=py34-lowest
+  - TOXENV=py34-latest
+  - TOXENV=py34-devel
+  - TOXENV=py35-lowest
+  - TOXENV=py35-latest
+  - TOXENV=py35-devel
+  - TOXENV=docs
+  - TOXENV=readme
+  - TOXENV=manifest
 before_install:
-  - python --version
-  - uname -a
-  - lsb_release -a
+- python --version
+- uname -a
+- lsb_release -a
 install:
-  - pip install codecov tox
-  - virtualenv --version
-  - easy_install --version
-  - pip --version
-  - tox --version
+- pip install codecov tox
+- virtualenv --version
+- easy_install --version
+- pip --version
+- tox --version
 script:
-  - tox -v
+- tox -v
 after_success:
-  - codecov
+- codecov
 after_failure:
-  - more .tox/log/* | cat
-  - more .tox/*/log/* | cat
+- more .tox/log/* | cat
+- more .tox/*/log/* | cat
 notifications:
   email:
     on_success: never
     on_failure: always
+deploy:
+  provider: pypi
+  user: jezdez
+  distributions: sdist bdist_wheel
+  password:
+    secure: VRo3u0o6ZL8f2mJajAopdjDLk7/CPcpaX3POe2N4iPinOMudB3M7vNg9yUVKiurPjqlKGtreqAvyBxC89W36D5IQJZpUV1rO2Qrdzne6SdsXIhWceFs3WB8D+19gzYPPK2PbHw7BD4CYcW5tqeB6ffs88m5+PonuoEA30s+2AfYh3hp/gF1AUHVDLmnigKhxGs81ivPggiLRk2dPwYmT4uRRjyD0VfFt2mNKDN+mPq6GBOJV+65cX1pZx9QCGuCPeBllKdQVSht6TMVXRGXqQ7v0ubEMcK+jItlMlp0JS43gqmpXbeYAQiZEhctLHKL2Sp8M3nFDNyovbBDEL/yZ0/Xd2ORZzMxLoN9y/UUJzQr8E4mFgqGQkpD0bA2YzJgQfsNg9Ua6cDIjU0U9ZkewPtaz/30OA7rWbx6eUbeo3FpZCoaBuFVgpiIe0VEhOuzQrkHhmtHfMOcYc0qECaXdZ+OT7nXlamslNneLe4Kzg/H9RZvLQSUf/2P1UjftaIjn9uMjBwMSQ99iVl49qTf/dVtZ3SsHDfGKf+BOY5vwEaVFj+cWI9b3wb7r9P/HW8V0CG4V2E0L/Ns/7HkkCoOLBrn1xpLQZ0neq6N5OoCj2/QAgkwL1cZ11gstASM6bW/rBb+OtJI9Zup+1nBqshWtVEtPBWg8fx/vhwpxsb/KMiI=
+  on:
+    tags: true
+    repo: jezdez/Flask-RQ2
+    condition: "$TOXENV = py27-latest"
