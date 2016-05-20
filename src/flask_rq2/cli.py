@@ -14,7 +14,7 @@ from rq.cli import cli as rq_cli
 
 try:
     from flask.cli import AppGroup, ScriptInfo
-except ImportError:
+except ImportError:  # pragma: no cover
     try:
         from flask_cli import AppGroup, ScriptInfo
     except ImportError:
