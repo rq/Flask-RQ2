@@ -1,8 +1,8 @@
 Flask-RQ2
 =========
 
-.. image:: https://travis-ci.org/jezdez/flask-rq2.svg?branch=master
-   :target: https://travis-ci.org/jezdez/flask-rq2
+.. image:: https://travis-ci.org/jezdez/Flask-RQ2.svg?branch=master
+   :target: https://travis-ci.org/jezdez/Flask-RQ2
 
 .. image:: https://codecov.io/gh/jezdez/Flask-RQ2/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/jezdez/Flask-RQ2
@@ -11,8 +11,8 @@ Resources
 ---------
 
 - `Documentation <https://flask-rq2.readthedocs.io/>`_
-- `Issue Tracker <http://github.com/jezdez/flask-rq2/issues>`_
-- `Code <http://github.com/jezdez/flask-rq2/>`_
+- `Issue Tracker <https://github.com/jezdez/flask-rq2/issues>`_
+- `Code <https://github.com/jezdez/flask-rq2/>`_
 
 .. snip
 
@@ -30,7 +30,7 @@ Installation
 
 .. code-block:: console
 
-    pip install flask-rq2
+    pip install Flask-RQ2
 
 Getting started
 ---------------
