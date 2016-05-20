@@ -52,7 +52,7 @@ setup_params = dict(
     license='MIT',
     author='Jannis Leidel',
     author_email='jannis@leidel.info',
-    description='Very short description',
+    description='A Flask extension for RQ.',
     long_description=long_description,
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
