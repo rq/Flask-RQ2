@@ -1,11 +1,17 @@
 Flask-RQ2
 =========
 
+.. image:: https://readthedocs.org/projects/flask-rq2/badge/?version=latest
+   :target: https://flask-rq2.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 .. image:: https://travis-ci.org/jezdez/Flask-RQ2.svg?branch=master
    :target: https://travis-ci.org/jezdez/Flask-RQ2
+   :alt: Test Status
 
 .. image:: https://codecov.io/gh/jezdez/Flask-RQ2/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/jezdez/Flask-RQ2
+   :alt: Test Coverage Status
 
 Resources
 ---------
