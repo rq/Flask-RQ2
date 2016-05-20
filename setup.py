@@ -47,7 +47,7 @@ pytest_runner = ['pytest-runner'] if needs_pytest else []
 
 setup_params = dict(
     name='Flask-RQ2',
-    version='16.0.1',
+    version='16.0.2',
     url='https://flask-rq2.readthedocs.io/',
     license='MIT',
     author='Jannis Leidel',
