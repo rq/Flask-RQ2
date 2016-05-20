@@ -3,14 +3,13 @@ import types
 from importlib import import_module
 
 from redis import Redis
-
 from rq.job import Job
 from rq.queue import Queue
 from rq.worker import Worker
+from rq_scheduler import Scheduler
 
 import pytest
 from flask_rq2 import RQ
-from rq_scheduler import Scheduler
 
 
 def exception_handler(*args, **kwargs):
