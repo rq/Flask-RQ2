@@ -37,13 +37,13 @@ def test_job_custom_queue(rq):
 def test_job_with_params(rq):
 
     @rq.job(timeout=1337, result_ttl=1984, ttl=666)
-    def substract(x, y):
+    def subtract(x, y):
         return x - y
 
-    assert substract.helper.queue_name == rq.default_queue
-    assert substract.helper.timeout == 1337
-    assert substract.helper.result_ttl == 1984
-    assert substract.helper.ttl == 666
+    assert subtract.helper.queue_name == rq.default_queue
+    assert subtract.helper.timeout == 1337
+    assert subtract.helper.result_ttl == 1984
+    assert subtract.helper.ttl == 666
 
 
 def add(x, y):
