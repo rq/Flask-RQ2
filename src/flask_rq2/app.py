@@ -240,10 +240,10 @@ class RQ(object):
         :type timeout: int
         :param result_ttl: Time to persist the job results in Redis,
                            in seconds.
-        :type timeout: int
+        :type result_ttl: int
         :param ttl: The maximum queued time of the job before it'll be
                     cancelled.
-        :type timeout: int
+        :type ttl: int
         """
         if callable(func_or_queue):
             func = func_or_queue
