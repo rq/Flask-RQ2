@@ -1,8 +1,7 @@
+import os
 from click.testing import CliRunner
-from flask import Flask
 
 import pytest
-from flask_cli import FlaskCLI
 
 from flask_rq2 import RQ
 
@@ -16,10 +15,10 @@ class Config(object):
 
 
 def create_app(config=None):
-    app = Flask('testapp')
+    from cliapp.app import testapp
     if config is not None:
-        app.config.from_object(config)
-    return app
+        testapp.config.from_object(config)
+    return testapp
 
 
 @pytest.fixture
@@ -28,7 +27,15 @@ def config():
 
 
 @pytest.fixture
-def app(request, config):
+def test_apps(monkeypatch):
+    monkeypatch.syspath_prepend(
+        os.path.abspath(os.path.join(
+            os.path.dirname(__file__), 'test_apps'))
+    )
+
+
+@pytest.fixture
+def app(request, config, test_apps, monkeypatch):
     app = create_app(config)
     ctx = app.app_context()
     ctx.push()
@@ -37,6 +44,7 @@ def app(request, config):
         ctx.pop()
 
     request.addfinalizer(teardown)
+    monkeypatch.setenv('FLASK_APP', 'cliapp.app:testapp')
     return app
 
 
@@ -47,7 +55,6 @@ def rq(app):
 
 @pytest.fixture
 def rq_cli_app(app):
-    FlaskCLI(app)
     app.cli.name = app.name
     RQ(app)
     return app
