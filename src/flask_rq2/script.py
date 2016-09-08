@@ -12,7 +12,7 @@ import operator
 import os
 import re
 
-from flask.ext.script import Command, Manager, Option
+from flask_script import Command, Manager, Option
 
 from rq.cli import cli
 
@@ -236,8 +236,8 @@ class RQManager(Manager):
     """
     To use in your own management script, add the following::
 
-        from flask.ext.script import Manager
-        from flask.ext.rq2.script import RQManager
+        from flask_script import Manager
+        from flask_rq2.script import RQManager
 
         from app import create_app
         from jobs import rq

@@ -46,7 +46,7 @@ To quickly start using Flask-RQ2, simply create an ``RQ`` instance:
 .. code-block:: python
 
     from flask import Flask
-    from flask.ext.rq2 import RQ
+    from flask_rq2 import RQ
 
     app = Flask(__name__)
     rq = RQ(app)
@@ -55,7 +55,7 @@ Alternatively, if you're using the `application factory`_ pattern:
 
 .. code-block:: python
 
-    from flask.ext.rq2 import RQ
+    from flask_rq2 import RQ
     rq = RQ()
 
 and then later call ``init_app`` where you create your application object:
@@ -86,7 +86,7 @@ the function to simplify enqueuing:
 
 .. code-block:: python
 
-    from flask.ext.rq2 import RQ
+    from flask_rq2 import RQ
 
     rq = RQ()
 
@@ -150,7 +150,7 @@ should call when catching exceptions during job execution.
 
 .. code-block:: python
 
-    from flask.ext.rq2 import RQ
+    from flask_rq2 import RQ
 
     rq = RQ()
 
@@ -180,7 +180,7 @@ Returns default queue or specific queue for name given as argument:
 
 .. code-block:: python
 
-    from flask.ext.rq2 import RQ
+    from flask_rq2 import RQ
 
     rq = RQ()
 
@@ -197,7 +197,7 @@ Returns a worker for default queue or specific queues for names given as argumen
 
 .. code-block:: python
 
-    from flask.ext.rq2 import RQ
+    from flask_rq2 import RQ
 
     rq = RQ()
 
@@ -216,7 +216,7 @@ Returns an `RQ Scheduler`_ instance for periodically enqueuing jobs:
 
 .. code-block:: python
 
-    from flask.ext.rq2 import RQ
+    from flask_rq2 import RQ
 
     rq = RQ()
 
@@ -260,11 +260,11 @@ command manager with the main script manager. For example:
 
 .. code-block:: python
 
-    from flask.ext.script import Manager
-    from flask.ext.rq2.script import RQManager
+    from flask_script import Manager
+    from flask_rq2.script import RQManager
 
     from app import create_app
-    from jobs import rq  # a flask.ext.rq2.RQ instance
+    from jobs import rq  # a flask_rq2.RQ instance
 
     app = create_app()
 
