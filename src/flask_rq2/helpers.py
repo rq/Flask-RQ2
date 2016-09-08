@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 class JobFunctions(object):
     """
-    Some helper functions that are addded to a function decorated
+    Some helper functions that are added to a function decorated
     with a :meth:`~flask_rq2.app.RQ.job` decorator.
     """
     #: the methods to add to jobs automatically
