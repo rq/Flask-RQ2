@@ -249,7 +249,7 @@ class RQManager(Manager):
 
     Then you'll be able to call ``python manage.py rq info`` etc.
 
-    Please call ``python manage.py rq --help`` for more infomation.
+    Please call ``python manage.py rq --help`` for more information.
     """
     def __init__(self, rq, *args, **kwargs):
         self.rq = rq

@@ -243,7 +243,7 @@ The rest happens automatically: a new ``rq`` subcommand will be added to the
 ``flask`` command that wraps RQ's own ``rq`` CLI tool using the Flask
 configuration values.
 
-Please call ``flask rq --help`` for more infomation, assuming
+Please call ``flask rq --help`` for more information, assuming
 you've set the ``FLASK_APP`` environment variable to the Flask app path.
 
 You can install the dependencies for this using this shortcut:
@@ -274,7 +274,7 @@ command manager with the main script manager. For example:
 That adds a ``rq`` subcommand to your management script and wraps RQ's own
 ``rq`` CLI tools automatically using the Flask configuration values.
 
-Please call ``python manage.py rq --help`` for more infomation, assuming
+Please call ``python manage.py rq --help`` for more information, assuming
 your management script is called ``manage.py``.
 
 You can also install the dependencies for this using this shortcut:
