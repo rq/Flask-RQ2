@@ -14,7 +14,7 @@ tests_require = [
     'pytest',
     'redis',
     'rq-scheduler',
-    'flask-cli>=0.3.0',
+    'flask-cli>=0.4.0',
     'flask-script',
     'coverage>=4.0',
     'pytest-isort',
@@ -30,7 +30,7 @@ extras_require = {
         'Sphinx>=1.4',
     ],
     'cli': [
-        'Flask-CLI>=0.3.0',
+        'Flask-CLI>=0.4.0',
     ],
     'script': [
         'Flask-Script',
