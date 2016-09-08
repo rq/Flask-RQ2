@@ -12,9 +12,9 @@ import operator
 import os
 import re
 
-from flask_script import Command, Manager, Option
-
 from rq.cli import cli
+
+from flask_script import Command, Manager, Option
 
 try:
     from rq_scheduler import Scheduler
