@@ -258,7 +258,7 @@ class RQ(object):
                 rq=self,
                 wrapped=wrapped,
                 queue_name=queue_name or self.default_queue,
-                timeout=timeout or self.default_timeout,
+                timeout=timeout,
                 result_ttl=result_ttl or DEFAULT_RESULT_TTL,
                 ttl=ttl,
             )
