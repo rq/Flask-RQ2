@@ -46,7 +46,7 @@ class JobFunctions(object):
             self.wrapped,
             args=args,
             kwargs=kwargs,
-            timeout=self.timeout,
+            timeout=self.timeout or self.rq.default_timeout,
             result_ttl=self.result_ttl,
             ttl=self.ttl,
             description=description,
