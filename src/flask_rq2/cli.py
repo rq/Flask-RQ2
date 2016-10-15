@@ -107,6 +107,7 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
               help='Default worker timeout to be used')
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
 @click.option('--quiet', '-q', is_flag=True, help='Show less output')
+@click.option('--sentry-dsn', default=None, help='Sentry DSN address')
 @click.option('--exception-handler', help='Exception handler(s) to use',
               multiple=True)
 @click.option('--pid',
@@ -115,7 +116,7 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.argument('queues', nargs=-1)
 @rq_command()
 def worker(rq, ctx, burst, name, path, results_ttl, worker_ttl,
-           verbose, quiet, exception_handler, pid, queues):
+           verbose, quiet, sentry_dsn, exception_handler, pid, queues):
     "Starts an RQ worker."
     ctx.invoke(
         rq_cli.worker,
@@ -131,7 +132,7 @@ def worker(rq, ctx, burst, name, path, results_ttl, worker_ttl,
         worker_ttl=worker_ttl,
         verbose=verbose,
         quiet=quiet,
-        sentry_dsn=None,
+        sentry_dsn=sentry_dsn,
         exception_handler=exception_handler or rq._exception_handlers,
         pid=pid,
         queues=queues or rq.queues,
