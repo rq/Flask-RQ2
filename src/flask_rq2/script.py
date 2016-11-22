@@ -148,6 +148,7 @@ class WorkerCommand(RQCommand):
         Option('--verbose', '-v', action='store_true',
                help='Show more output'),
         Option('--quiet', '-q', action='store_true', help='Show less output'),
+        Option('--sentry-dsn', type=str, help='Sentry DSN address'),
         Option('--exception-handler', type=list,
                help='Exception handler(s) to use', action='append'),
         Option('--pid', metavar='FILE',
@@ -159,7 +160,7 @@ class WorkerCommand(RQCommand):
     )
 
     def run(self, burst, name, path, results_ttl, worker_ttl, verbose,
-            quiet, exception_handler, pid, queues):
+            quiet, sentry_dsn, exception_handler, pid, queues):
         cli.worker.callback(
             url=self.rq.url,
             config=None,
@@ -173,7 +174,7 @@ class WorkerCommand(RQCommand):
             worker_ttl=worker_ttl,
             verbose=verbose,
             quiet=quiet,
-            sentry_dsn=None,
+            sentry_dsn=sentry_dsn,
             exception_handler=exception_handler or self.rq._exception_handlers,
             pid=pid,
             queues=queues or self.rq.queues,
