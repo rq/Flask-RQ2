@@ -11,4 +11,4 @@
 from .app import RQ  # noqa
 
 __author__ = 'Jannis Leidel'
-__version__ = '16.1.1'
+__version__ = '17.0'
