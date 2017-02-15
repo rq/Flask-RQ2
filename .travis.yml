@@ -18,7 +18,7 @@ install:
 - pip --version
 - tox --version
 script:
-- tox -v
+- tox -v --travis-after
 after_success:
 - codecov
 after_failure:
@@ -37,4 +37,4 @@ deploy:
   on:
     tags: true
     repo: jezdez/Flask-RQ2
-    condition: "$TOXENV = py36-latest"
+    python: 3.6
