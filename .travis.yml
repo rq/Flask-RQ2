@@ -1,31 +1,18 @@
 language: python
-python: '3.6'
 sudo: false
 services:
 - redis-server
-env:
-  matrix:
-  - TOXENV=py27-lowest
-  - TOXENV=py27-latest
-  - TOXENV=py27-devel
-  - TOXENV=py34-lowest
-  - TOXENV=py34-latest
-  - TOXENV=py34-devel
-  - TOXENV=py35-lowest
-  - TOXENV=py35-latest
-  - TOXENV=py35-devel
-  - TOXENV=py36-lowest
-  - TOXENV=py36-latest
-  - TOXENV=py36-devel
-  - TOXENV=docs
-  - TOXENV=readme
-  - TOXENV=manifest
+python:
+- "2.7"
+- "3.4"
+- "3.5"
+- "3.6"
 before_install:
 - python --version
 - uname -a
 - lsb_release -a
 install:
-- pip install codecov tox
+- pip install codecov tox-travis
 - virtualenv --version
 - easy_install --version
 - pip --version
@@ -50,4 +37,4 @@ deploy:
   on:
     tags: true
     repo: jezdez/Flask-RQ2
-    condition: "$TOXENV = py27-latest"
+    condition: "$TOXENV = py36-latest"
