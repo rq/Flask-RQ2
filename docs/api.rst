@@ -16,5 +16,5 @@ API
 .. automodule:: flask_rq2.cli
    :members:
 
-.. automodule:: flask_rq2.script
-   :members: RQManager
+.. automodule:: flask_rq2.job
+   :members:

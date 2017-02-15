@@ -6,10 +6,6 @@
     The core interface of Flask-RQ2.
 
 """
-import sys
-import types
-
-import redis
 from flask import _app_ctx_stack as stack
 from rq.queue import Queue
 from rq.utils import import_attribute
@@ -37,19 +33,42 @@ class RQ(object):
     default_timeout = Queue.DEFAULT_TIMEOUT
 
     #: The DSN (URL) of the Redis connection.
-    url = 'redis://localhost:6379/0'
+    #:
+    #: .. versionchanged:: 17.1
+    #:    Renamed from ``url`` to ``redis_url``.
+    redis_url = 'redis://localhost:6379/0'
+
+    #: The Redis client class to use.
+    #:
+    #: .. versionadded:: 17.1
+    connection_class = 'redis.StrictRedis'
 
     #: List of queue names for RQ to work on.
     queues = [default_queue]
 
     #: Dotted import path to RQ Queue class to use as base class.
-    queue_path = 'rq.queue.Queue'
+    #:
+    #: .. versionchanged:: 17.1
+    #:    Renamed from ``queue_path`` to ``queue_class``.
+    queue_class = 'rq.queue.Queue'
 
     #: Dotted import path to RQ Workers class to use as base class.
-    worker_path = 'rq.worker.Worker'
+    #:
+    #: .. versionchanged:: 17.1
+    #:    Renamed from ``worker_path`` to ``worker_class``.
+    worker_class = 'rq.worker.Worker'
 
     #: Dotted import path to RQ Job class to use as base class.
-    job_path = 'rq.job.Job'
+    #:
+    #: .. versionchanged:: 17.1
+    #:    Renamed from ``job_path`` to ``job_class``.
+    job_class = 'flask_rq2.job.FlaskJob'
+
+    #: Dotted import path to RQ Scheduler class.
+    #:
+    #: .. versionchanged:: 17.1
+    #:    Renamed from ``scheduler_path`` to ``scheduler_class``.
+    scheduler_class = 'rq_scheduler.Scheduler'
 
     #: Name of RQ queue to schedule jobs in by rq-scheduler.
     scheduler_queue = default_queue
@@ -59,7 +78,10 @@ class RQ(object):
     scheduler_interval = 60
 
     #: The default job functions class.
-    functions_path = 'flask_rq2.helpers.JobFunctions'
+    #:
+    #: .. versionchanged:: 17.1
+    #:    Renamed from ``functions_path`` to ``functions_class``.
+    functions_class = 'flask_rq2.helpers.JobFunctions'
 
     def __init__(self, app=None, default_timeout=None, async=None):
         """
@@ -80,7 +102,7 @@ class RQ(object):
         self._jobs = []
         self._exception_handlers = []
         self._queue_instances = {}
-        self._functions_cls = import_attribute(self.functions_path)
+        self._functions_cls = import_attribute(self.functions_class)
 
         if app is not None:
             self.init_app(app)
@@ -94,31 +116,40 @@ class RQ(object):
             return ctx.rq_redis
 
     def _connect(self):
-        return redis.from_url(self.url)
+        connection_class = import_attribute(self.connection_class)
+        return connection_class.from_url(self.redis_url)
 
     def init_app(self, app):
         """
         Initialize the app, e.g. can be used if factory pattern is used.
         """
-        self.url = app.config.setdefault(
+        self.redis_url = app.config.setdefault(
             'RQ_REDIS_URL',
-            self.url,
+            self.redis_url,
+        )
+        self.connection_class = app.config.setdefault(
+            'RQ_CONNECTION_CLASS',
+            self.connection_class,
         )
         self.queues = app.config.setdefault(
             'RQ_QUEUES',
             self.queues,
         )
-        self.queue_path = app.config.setdefault(
+        self.queue_class = app.config.setdefault(
             'RQ_QUEUE_CLASS',
-            self.queue_path,
+            self.queue_class,
         )
-        self.worker_path = app.config.setdefault(
+        self.worker_class = app.config.setdefault(
             'RQ_WORKER_CLASS',
-            self.worker_path,
+            self.worker_class,
         )
-        self.job_path = app.config.setdefault(
+        self.job_class = app.config.setdefault(
             'RQ_JOB_CLASS',
-            self.job_path,
+            self.job_class,
+        )
+        self.scheduler_class = app.config.setdefault(
+            'RQ_SCHEDULER_CLASS',
+            self.scheduler_class,
         )
         self.scheduler_queue = app.config.setdefault(
             'RQ_SCHEDULER_QUEUE',
@@ -139,9 +170,6 @@ class RQ(object):
         app.extensions = getattr(app, 'extensions', {})
         app.extensions['rq2'] = self
 
-        # init the backends (job, queue and worker classes)
-        self.init_backends(app)
-
         if hasattr(app, 'cli'):
             self.init_cli(app)
 
@@ -159,43 +187,6 @@ class RQ(object):
         # only add commands if we have a click context available
         from .cli import add_commands
         add_commands(app.cli, self)
-
-    def init_backends(self, app):
-        """
-        Initialize the RQ backends with a closure so the RQ job class is
-        aware of the Flask app context.
-        """
-        BaseJob = import_attribute(self.job_path)
-        BaseQueue = import_attribute(self.queue_path)
-        BaseWorker = import_attribute(self.worker_path)
-
-        class AppJob(BaseJob):
-            def perform(self):
-                with app.app_context():
-                    return super(AppJob, self).perform()
-
-        class AppQueue(BaseQueue):
-            job_class = AppJob
-
-        class AppWorker(BaseWorker):
-            queue_class = AppQueue
-            job_class = AppJob
-
-        self.job_cls = AppJob
-        self.queue_cls = AppQueue
-        self.worker_cls = AppWorker
-        self.scheduler_cls = Scheduler
-
-        self.module_path = 'flask_rq2.backend_%s' % app.name
-        self.module = types.ModuleType(self.module_path)
-        self.module.__path__ = []
-        sys.modules[self.module_path] = self.module
-
-        for backend_type in ['job', 'queue', 'worker']:
-            backend_cls = getattr(self, '%s_cls' % backend_type)
-            setattr(self.module, backend_cls.__name__, backend_cls)
-            setattr(self, 'app_%s_path' % backend_type,
-                    '%s.%s' % (self.module_path, backend_cls.__name__))
 
     def exception_handler(self, callback):
         """
@@ -284,15 +275,21 @@ class RQ(object):
                          jobs.
         :type interval: int
         """
-        if self.scheduler_cls is None:
+        if self.scheduler_class is None:
             raise RuntimeError('Cannot import rq-scheduler. Is it installed?')
+        scheduler_cls = import_attribute(self.scheduler_class)
         if interval is None:
             interval = self.scheduler_interval
-        return self.scheduler_cls(
+        # monkey patch until we have an upstream way to set the job
+        # class used by the scheduler
+        from rq_scheduler import scheduler as scheduler_module
+        scheduler_module.Job = import_attribute(self.job_class)
+        scheduler = scheduler_cls(
             queue_name=self.scheduler_queue,
             interval=interval,
             connection=self.connection,
         )
+        return scheduler
 
     def get_queue(self, name=None):
         """
@@ -311,11 +308,13 @@ class RQ(object):
             name = self.default_queue
         queue = self._queue_instances.get(name)
         if queue is None:
-            queue = self.queue_cls(
+            queue_cls = import_attribute(self.queue_class)
+            queue = queue_cls(
                 name=name,
                 default_timeout=self.default_timeout,
                 async=self._async,
                 connection=self.connection,
+                job_class=self.job_class
             )
             self._queue_instances[name] = queue
         return queue
@@ -334,7 +333,13 @@ class RQ(object):
         if not queues:
             queues = self.queues
         queues = [self.get_queue(name) for name in queues]
-        worker = self.worker_cls(queues, connection=self.connection)
+        worker_cls = import_attribute(self.worker_class)
+        worker = worker_cls(
+            queues,
+            connection=self.connection,
+            job_class=self.job_class,
+            queue_class=self.queue_class,
+        )
         for exception_handler in self._exception_handlers:
             worker.push_exc_handler(import_attribute(exception_handler))
         return worker

@@ -114,6 +114,7 @@ class JobFunctions(object):
 
         """
         repeat = kwargs.pop('repeat', None)
+        description = kwargs.pop('description', None)
         return self.rq.get_scheduler().cron(
             pattern,
             self.wrapped,
@@ -122,5 +123,6 @@ class JobFunctions(object):
             repeat=repeat,
             queue_name=self.queue_name,
             id='cron-%s' % name,
-            timeout=self.timeout
+            timeout=self.timeout,
+            description=description,
         )

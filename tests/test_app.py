@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-import types
-from importlib import import_module
-
-from redis import Redis
-from rq.job import Job
+from redis import StrictRedis
 from rq.queue import Queue
+from rq.utils import import_attribute
 from rq.worker import Worker
 from rq_scheduler import Scheduler
 
@@ -22,10 +19,9 @@ def test_init_app(app, config):
     assert getattr(rq, 'module', None) is None
 
     rq.init_app(app)
-    assert rq.url == config.RQ_REDIS_URL
-    assert isinstance(rq.connection, Redis)
+    assert rq.redis_url == config.RQ_REDIS_URL
+    assert isinstance(rq.connection, StrictRedis)
     assert 'rq2' in getattr(app, 'extensions', {})
-    assert rq.module_path == 'flask_rq2.backend_%s' % app.name
 
 
 def test_rq_outside_flask():
@@ -35,8 +31,8 @@ def test_rq_outside_flask():
 
 
 def test_config_redis(config, rq):
-    assert rq.url == config.RQ_REDIS_URL
-    assert isinstance(rq.connection, Redis)
+    assert rq.redis_url == config.RQ_REDIS_URL
+    assert isinstance(rq.connection, StrictRedis)
 
 
 def test_config_queues(config, rq):
@@ -71,22 +67,6 @@ def test_exception_handler(rq):
     assert 'test_app.exception_handler' in rq._exception_handlers
 
 
-def test_backend_init(app, rq):
-    assert issubclass(rq.job_cls, Job)
-    assert issubclass(rq.queue_cls, Queue)
-    assert issubclass(rq.worker_cls, Worker)
-    assert isinstance(rq.module, types.ModuleType)
-
-    assert rq.queue_cls.job_class is rq.job_cls
-    assert rq.worker_cls.queue_class is rq.queue_cls
-    assert rq.worker_cls.job_class is rq.job_cls
-
-
-def test_backend_module_importable(app, rq):
-    assert rq.module_path == 'flask_rq2.backend_%s' % app.name
-    assert rq.module == import_module(rq.module_path)
-
-
 def test_get_worker(rq):
     worker = rq.get_worker()
     assert isinstance(worker, Worker)
@@ -116,7 +96,7 @@ def test_get_queue(rq):
     assert queue in rq._queue_instances.values()
 
     assert isinstance(queue, Queue)
-    assert isinstance(queue, rq.queue_cls)
+    assert isinstance(queue, import_attribute(rq.queue_class))
     assert queue.name == rq.default_queue
     assert queue._default_timeout == rq.default_timeout
     assert queue._async == rq._async
@@ -139,7 +119,7 @@ def test_get_scheduler(rq):
     scheduler = rq.get_scheduler()
 
     assert isinstance(scheduler, Scheduler)
-    assert isinstance(scheduler, rq.scheduler_cls)
+    assert isinstance(scheduler, import_attribute(rq.scheduler_class))
     assert scheduler.queue_name == rq.scheduler_queue
     assert scheduler._interval == rq.scheduler_interval
     assert scheduler.connection == rq.connection
@@ -152,7 +132,8 @@ def test_get_scheduler_interval(rq):
 
 
 def test_get_scheduler_importerror(rq):
-    rq.scheduler_cls = None  # in case scheduler can't be imported
+    # in case scheduler can't be imported
+    rq.scheduler_class = 'non.existing.Scheduler'
 
-    with pytest.raises(RuntimeError):
+    with pytest.raises(ImportError):
         rq.get_scheduler()

@@ -9,6 +9,7 @@
 import operator
 import os
 from functools import update_wrapper
+
 import click
 from rq.cli import cli as rq_cli
 
@@ -27,6 +28,18 @@ except ImportError:  # pragma: no cover
     Scheduler = None
 
 _commands = {}
+
+
+def shared_options(rq):
+    "Default class options to pass to the CLI commands."
+    return {
+        'url': rq.redis_url,
+        'config': None,
+        'worker_class': rq.worker_class,
+        'job_class': rq.job_class,
+        'queue_class': rq.queue_class,
+        'connection_class': rq.connection_class,
+    }
 
 
 def rq_command(condition=True):
@@ -52,9 +65,9 @@ def empty(rq, ctx, all, queues):
     "Empty given queues."
     return ctx.invoke(
         rq_cli.empty,
-        url=rq.url,
         all=all,
         queues=queues or rq.queues,
+        **shared_options(rq)
     )
 
 
@@ -65,9 +78,9 @@ def requeue(rq, ctx, all, job_ids):
     "Requeue failed jobs."
     return ctx.invoke(
         rq_cli.requeue,
-        url=rq.url,
         all=all,
         job_ids=job_ids,
+        **shared_options(rq)
     )
 
 
@@ -87,7 +100,6 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
     "RQ command-line monitor."
     return ctx.invoke(
         rq_cli.info,
-        url=rq.url,
         path=path,
         interval=interval,
         raw=raw,
@@ -95,11 +107,14 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
         only_workers=only_workers,
         by_queue=by_queue,
         queues=queues or rq.queues,
+        **shared_options(rq)
     )
 
 
 @click.option('--burst', '-b', is_flag=True,
               help='Run in burst mode (quit after all work is done)')
+@click.option('--logging_level', type=str, default="INFO",
+              help='Set logging level')
 @click.option('--name', '-n', help='Specify a different name')
 @click.option('--path', '-P', default='.', help='Specify the import path.')
 @click.option('--results-ttl', help='Default results timeout to be used')
@@ -115,18 +130,15 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
                    'the specified path')
 @click.argument('queues', nargs=-1)
 @rq_command()
-def worker(rq, ctx, burst, name, path, results_ttl, worker_ttl,
-           verbose, quiet, sentry_dsn, exception_handler, pid, queues):
+def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
+           worker_ttl, verbose, quiet, sentry_dsn, exception_handler, pid,
+           queues):
     "Starts an RQ worker."
     ctx.invoke(
         rq_cli.worker,
-        url=rq.url,
-        config=None,
         burst=burst,
+        logging_level=logging_level,
         name=name,
-        worker_class=rq.app_worker_path,
-        job_class=rq.app_job_path,
-        queue_class=rq.app_queue_path,
         path=path,
         results_ttl=results_ttl,
         worker_ttl=worker_ttl,
@@ -136,6 +148,7 @@ def worker(rq, ctx, burst, name, path, results_ttl, worker_ttl,
         exception_handler=exception_handler or rq._exception_handlers,
         pid=pid,
         queues=queues or rq.queues,
+        **shared_options(rq)
     )
 
 
@@ -147,9 +160,8 @@ def suspend(rq, ctx, duration):
     "Suspends all workers."
     ctx.invoke(
         rq_cli.suspend,
-        url=rq.url,
-        config=None,
         duration=duration,
+        **shared_options(rq)
     )
 
 
@@ -158,8 +170,7 @@ def resume(rq, ctx):
     "Resumes all workers."
     ctx.invoke(
         rq_cli.resume,
-        url=rq.url,
-        config=None,
+        **shared_options(rq)
     )
 
 

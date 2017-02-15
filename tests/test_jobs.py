@@ -1,6 +1,8 @@
 import uuid
 from datetime import datetime, timedelta
 
+from rq.utils import import_attribute
+
 from flask_rq2 import RQ
 from flask_rq2.helpers import JobFunctions
 
@@ -56,7 +58,7 @@ def test_queue_job(app):
     rq.job(add)
 
     job1 = add.queue(1, 2)
-    assert isinstance(job1, rq.job_cls)
+    assert isinstance(job1, import_attribute(rq.job_class))
     assert job1.args == (1, 2)
     assert job1.kwargs == {}
     assert job1.timeout == add.helper.timeout == rq.default_timeout

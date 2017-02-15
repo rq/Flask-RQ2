@@ -15,7 +15,6 @@ tests_require = [
     'redis',
     'rq-scheduler',
     'flask-cli>=0.4.0',
-    'flask-script',
     'coverage>=4.0',
     'pytest-isort',
     'pytest-cache>=1.0',
@@ -30,9 +29,6 @@ extras_require = {
     ],
     'cli': [
         'Flask-CLI>=0.4.0',
-    ],
-    'script': [
-        'Flask-Script',
     ],
     'tests': tests_require,
 }
@@ -61,8 +57,8 @@ setup_params = dict(
     setup_requires=[] + pytest_runner,
     install_requires=[
         'Flask>=0.10',
-        'rq>=0.6.0,<0.7.0',
-        'rq-scheduler>=0.6.1',
+        'rq>=0.8.0',
+        'rq-scheduler>=0.7.0',
     ],
     extras_require=extras_require,
     tests_require=tests_require,
