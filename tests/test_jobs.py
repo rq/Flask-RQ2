@@ -92,6 +92,16 @@ def test_queue_job(app):
     assert len(queue.jobs) == 0
 
 
+def test_factory_pattern(app, config):
+    rq = RQ(default_timeout=123)
+    rq.init_app(app)
+    rq.default_timeout = 456  # override default timeout
+    rq.job(add)
+    add.helper.timeout == 456
+    add.helper.timeout = 789
+    add.helper.timeout == 789
+
+
 def purge(scheduler):
     [scheduler.cancel(job) for job in scheduler.get_jobs()]
 

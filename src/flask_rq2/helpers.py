@@ -14,18 +14,25 @@ class JobFunctions(object):
     #: the methods to add to jobs automatically
     functions = ['queue', 'schedule', 'cron']
 
-    def __init__(self, rq, wrapped, queue_name, timeout,
-                 result_ttl, ttl):
+    def __init__(self, rq, wrapped, queue_name, timeout, result_ttl, ttl):
         self.rq = rq
         self.wrapped = wrapped
         self.queue_name = queue_name
-        self.timeout = timeout
+        self._timeout = timeout
         self.result_ttl = result_ttl
         self.ttl = ttl
 
     def __repr__(self):
         full_name = '.'.join([self.wrapped.__module__, self.wrapped.__name__])
         return '<JobFunctions %s>' % full_name
+
+    @property
+    def timeout(self):
+        return self._timeout or self.rq.default_timeout
+
+    @timeout.setter
+    def timeout(self, value):
+        self._timeout = value
 
     def queue(self, *args, **kwargs):
         """
@@ -46,7 +53,7 @@ class JobFunctions(object):
             self.wrapped,
             args=args,
             kwargs=kwargs,
-            timeout=self.timeout or self.rq.default_timeout,
+            timeout=self.timeout,
             result_ttl=self.result_ttl,
             ttl=self.ttl,
             description=description,
