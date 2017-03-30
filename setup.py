@@ -62,7 +62,7 @@ setup_params = dict(
     setup_requires=[] + pytest_runner,
     install_requires=[
         'Flask>=0.10',
-        'rq>=0.6.0,<0.7.0',
+        'rq>=0.6.0',
         'rq-scheduler>=0.6.1',
     ],
     extras_require=extras_require,

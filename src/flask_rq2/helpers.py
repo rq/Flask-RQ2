@@ -4,6 +4,9 @@
     ~~~~~~~~~~~~~~~~~
 """
 from datetime import datetime, timedelta
+from packaging.version import parse
+
+import rq
 
 
 class JobFunctions(object):
@@ -121,3 +124,15 @@ class JobFunctions(object):
             queue_name=self.queue_name,
             id='cron-%s' % name,
         )
+
+
+def is_rq_version_greater_than(version):
+    """
+    A function to check rq version. It is required in
+    several places, to check API incompatibilities.
+
+    :param version: Version number to check,
+                    could be strict or loose.
+    :type version: str
+    """
+    return parse(rq.__version__) > parse(version)
