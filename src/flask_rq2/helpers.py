@@ -4,7 +4,7 @@
     ~~~~~~~~~~~~~~~~~
 """
 from datetime import datetime, timedelta
-from packaging.version import parse
+from distutils.version import StrictVersion
 
 import rq
 
@@ -135,4 +135,4 @@ def is_rq_version_greater_than(version):
                     could be strict or loose.
     :type version: str
     """
-    return parse(rq.__version__) > parse(version)
+    return StrictVersion(rq.__version__) > StrictVersion(version)
