@@ -1,8 +1,9 @@
 import os
 
+from click.testing import CliRunner
+
 import pytest
 
-from click.testing import CliRunner
 from flask_rq2 import RQ
 
 

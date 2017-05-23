@@ -1,9 +1,9 @@
 import logging
 import sys
 
-import pytest
-
 from flask import current_app
+
+import pytest
 from flask_rq2 import app as flask_rq2_app
 from flask_rq2 import script as flask_rq2_script
 from flask_rq2 import RQ

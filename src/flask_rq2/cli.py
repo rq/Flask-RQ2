@@ -9,11 +9,11 @@
 import operator
 import os
 from functools import update_wrapper
-import click
 
-from flask_rq2.helpers import is_rq_version_greater_than
+import click
 from rq.cli import cli as rq_cli
 
+from flask_rq2.helpers import is_rq_version_greater_than
 
 try:
     from flask.cli import AppGroup, ScriptInfo
