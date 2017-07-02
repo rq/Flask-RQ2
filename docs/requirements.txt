@@ -1,4 +1,4 @@
-sphinx==1.5.2
+sphinx==1.6.3
 sphinx-readable-theme==1.3.0
 -e .[cli]
 -e .[script]
