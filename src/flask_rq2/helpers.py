@@ -4,6 +4,9 @@
     ~~~~~~~~~~~~~~~~~
 """
 from datetime import datetime, timedelta
+from distutils.version import StrictVersion
+
+import rq
 
 
 class JobFunctions(object):
@@ -124,3 +127,15 @@ class JobFunctions(object):
             id='cron-%s' % name,
             timeout=self.timeout
         )
+
+
+def is_rq_version_greater_than(version):
+    """
+    A function to check rq version. It is required in
+    several places, to check API incompatibilities.
+
+    :param version: Version number to check,
+                    could be strict or loose.
+    :type version: str
+    """
+    return StrictVersion(rq.__version__) > StrictVersion(version)
