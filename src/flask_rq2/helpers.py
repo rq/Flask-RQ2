@@ -49,6 +49,7 @@ class JobFunctions(object):
         at_front = kwargs.pop('at_front', False)
         description = kwargs.pop('description', None)
         job_id = kwargs.pop('job_id', None)
+        meta = kwargs.pop('meta', None)
         return self.rq.get_queue(self.queue_name).enqueue_call(
             self.wrapped,
             args=args,
@@ -60,6 +61,7 @@ class JobFunctions(object):
             depends_on=depends_on,
             job_id=job_id,
             at_front=at_front,
+            meta=meta
         )
 
     def schedule(self, time_or_delta, *args, **kwargs):
