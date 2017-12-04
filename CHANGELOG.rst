@@ -17,6 +17,10 @@ E.g.::
 17.1 (2017-12-04)
 ~~~~~~~~~~~~~~~~~
 
+- Requires Flask >= 0.10, but it's recommended to use at least 0.11.
+
+- Requires rq 0.8.0 or later and rq-scheduler 0.7.0 or later.
+
 - Requires setting ``FLASK_APP`` environment variable to load Flask app
   during job performing.
 
@@ -26,9 +30,8 @@ E.g.::
 - Added ``RQ_SCHEDULER_CLASS``, ``RQ_WORKER_CLASS``, ``RQ_JOB_CLASS`` and
   ``RQ_QUEUE_CLASS`` as configuration values.
 
-- Requires Flask >= 0.10, but it's recommended to use at least 0.11.
-
-- Requires rq 0.8.0 or later and rq-scheduler 0.7.0 or later.
+- Added support for rq-scheduler's ``--burst`` option to automatically quit
+  after all work is done.
 
 - Dropped support for Flask-Script in favor of native Flask CLI support
   (or via Flask-CLI app for Flask < 0.11).

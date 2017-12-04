@@ -175,6 +175,8 @@ def resume(rq, ctx):
 
 
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
+@click.option('--burst', '-b', is_flag=True,
+              help='Run in burst mode (quit after all work is done)')
 @click.option('-i', '--interval', default=60.0, type=float, metavar='SECONDS',
               help='How often the scheduler checks for new jobs to add to '
                    'the queue (in seconds, can be floating-point for more '
@@ -183,7 +185,7 @@ def resume(rq, ctx):
               help='Write the process ID number '
                    'to a file at the specified path')
 @rq_command(Scheduler is not None)
-def scheduler(rq, ctx, verbose, interval, pid):
+def scheduler(rq, ctx, verbose, burst, interval, pid):
     "Periodically checks for scheduled jobs."
     scheduler = rq.get_scheduler(interval)
     if pid:
@@ -194,7 +196,7 @@ def scheduler(rq, ctx, verbose, interval, pid):
     else:
         level = 'INFO'
     setup_loghandlers(level)
-    scheduler.run()
+    scheduler.run(burst=burst)
 
 
 def add_commands(cli, rq):
