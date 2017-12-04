@@ -22,7 +22,6 @@ tests_require = [
     'pytest-flake8>=0.5',
     'pytest>=2.8.0',
     'pytest-wholenodeid',
-    'pytest-capturelog',
 ]
 
 extras_require = {
