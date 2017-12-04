@@ -86,7 +86,9 @@ class RQ(object):
     #:
     #: .. versionchanged:: 17.1
     #:    Renamed from ``functions_path`` to ``functions_class``.
-    functions_class = 'flask_rq2.helpers.JobFunctions'
+    #:    Moved from ``flask_rq2.helpers.JobFunctions`` to
+    #     ``flask_rq2.functions.JobFunctions``.
+    functions_class = 'flask_rq2.functions.JobFunctions'
 
     def __init__(self, app=None, default_timeout=None, async=None):
         """
@@ -225,8 +227,8 @@ class RQ(object):
             def add(x, y):
                 return x + y
 
-        Adds various helpers to the job function as documented in
-        :class:`~flask_rq2.helpers.JobFunctions`.
+        Adds various functions to the job as documented in
+        :class:`~flask_rq2.functions.JobFunctions`.
 
         :param queue: Name of the queue to add job to, defaults to
                       :attr:`flask_rq2.app.RQ.default_queue`.

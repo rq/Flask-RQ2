@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from rq.utils import import_attribute
 
 from flask_rq2 import RQ
-from flask_rq2.helpers import JobFunctions
+from flask_rq2.functions import JobFunctions
 
 
 def test_job(rq):

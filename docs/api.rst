@@ -9,12 +9,12 @@ API
 
       .. automethod:: __init__
 
-.. automodule:: flask_rq2.helpers
-   :members:
-   :member-order: bysource
-
 .. automodule:: flask_rq2.cli
    :members:
+
+.. automodule:: flask_rq2.functions
+   :members:
+   :member-order: bysource
 
 .. automodule:: flask_rq2.job
    :members:

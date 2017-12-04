@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    flask_rq2.helpers
-    ~~~~~~~~~~~~~~~~~
+    flask_rq2.functions
+    ~~~~~~~~~~~~~~~~~~~
 """
 from datetime import datetime, timedelta
 
