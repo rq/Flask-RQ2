@@ -32,6 +32,11 @@ class RQ(object):
     #: The fallback default timeout value.
     default_timeout = Queue.DEFAULT_TIMEOUT
 
+    #: The fallback default result TTL.
+    #:
+    #: .. versionadded:: 17.1
+    default_result_ttl = DEFAULT_RESULT_TTL
+
     #: The DSN (URL) of the Redis connection.
     #:
     #: .. versionchanged:: 17.1
@@ -243,14 +248,21 @@ class RQ(object):
             func = None
             queue_name = func_or_queue
 
+        # Catch empty strings and None
+        if not queue_name:
+            queue_name = self.default_queue
+
+        if result_ttl is None:
+            result_ttl = self.default_result_ttl
+
         def wrapper(wrapped):
             self._jobs.append(wrapped)
             helper = self._functions_cls(
                 rq=self,
                 wrapped=wrapped,
-                queue_name=queue_name or self.default_queue,
+                queue_name=queue_name,
                 timeout=timeout,
-                result_ttl=result_ttl or DEFAULT_RESULT_TTL,
+                result_ttl=result_ttl,
                 ttl=ttl,
             )
             wrapped.helper = helper

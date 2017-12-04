@@ -36,7 +36,7 @@ def test_job_custom_queue(rq):
     assert add.helper.queue_name == 'non-default'
 
 
-def test_job_with_params(rq):
+def test_job_with_valid_params(rq):
 
     @rq.job(timeout=1337, result_ttl=1984, ttl=666)
     def subtract(x, y):
@@ -46,6 +46,16 @@ def test_job_with_params(rq):
     assert subtract.helper.timeout == 1337
     assert subtract.helper.result_ttl == 1984
     assert subtract.helper.ttl == 666
+
+
+def test_job_with_fallback_params(rq):
+
+    @rq.job('', result_ttl=0)
+    def subtract(x, y):
+        return x - y
+
+    assert subtract.helper.queue_name == rq.default_queue
+    assert subtract.helper.result_ttl == 0 != rq.default_result_ttl
 
 
 def add(x, y):
