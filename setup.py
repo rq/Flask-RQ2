@@ -15,12 +15,12 @@ tests_require = [
     'redis',
     'rq-scheduler',
     'flask-cli>=0.4.0',
-    'coverage>=4.0',
-    'pytest-isort',
+    'pytest>=2.8.0',
     'pytest-cache>=1.0',
     'pytest-flake8>=0.5',
-    'pytest>=2.8.0',
     'pytest-wholenodeid',
+    'pytest-coverage',
+    'pytest-pythonpath',
 ]
 
 extras_require = {
