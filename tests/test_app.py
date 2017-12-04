@@ -26,8 +26,7 @@ def test_init_app(app, config):
 
 def test_rq_outside_flask():
     rq = RQ()
-    # the redis connection is none since the Flask app context isn't there
-    assert rq.connection is None
+    assert pytest.raises(RuntimeError, lambda: rq.connection)
 
 
 def test_config_redis(config, rq):

@@ -6,7 +6,6 @@
     The core interface of Flask-RQ2.
 
 """
-from flask import _app_ctx_stack as stack
 from rq.queue import Queue
 from rq.utils import import_attribute
 from rq.worker import DEFAULT_RESULT_TTL
@@ -110,17 +109,20 @@ class RQ(object):
         self._exception_handlers = []
         self._queue_instances = {}
         self._functions_cls = import_attribute(self.functions_class)
+        self._ready_to_connect = False
+        self._connection = None
 
         if app is not None:
             self.init_app(app)
 
     @property
     def connection(self):
-        ctx = stack.top
-        if ctx is not None:
-            if not hasattr(ctx, 'rq_redis'):
-                ctx.rq_redis = self._connect()
-            return ctx.rq_redis
+        if not self._ready_to_connect:
+            raise RuntimeError('Flask-RQ2 is not ready yet to connect to '
+                               'Redis. Was it initialized with a Flask app?')
+        if self._connection is None:
+            self._connection = self._connect()
+        return self._connection
 
     def _connect(self):
         connection_class = import_attribute(self.connection_class)
@@ -130,6 +132,7 @@ class RQ(object):
         """
         Initialize the app, e.g. can be used if factory pattern is used.
         """
+        # The connection related config values
         self.redis_url = app.config.setdefault(
             'RQ_REDIS_URL',
             self.redis_url,
@@ -138,6 +141,9 @@ class RQ(object):
             'RQ_CONNECTION_CLASS',
             self.connection_class,
         )
+        # all infos to create a Redis connection are now avaiable.
+        self._ready_to_connect = True
+
         self.queues = app.config.setdefault(
             'RQ_QUEUES',
             self.queues,
