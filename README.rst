@@ -13,6 +13,10 @@ Flask-RQ2
    :target: https://codecov.io/gh/jezdez/Flask-RQ2
    :alt: Test Coverage Status
 
+.. image:: https://img.shields.io/badge/calver-YY.MINOR.MICRO-22bfda.svg
+   :target: https://calver.org/
+   :alt: CalVer - Timely Software Versioning
+
 Resources
 ---------
 
