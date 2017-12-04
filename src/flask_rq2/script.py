@@ -14,6 +14,7 @@ import re
 
 from rq.cli import cli
 
+from flask_rq2.helpers import is_rq_version_greater_than
 from flask_script import Command, Manager, Option
 
 try:
@@ -156,12 +157,16 @@ class WorkerCommand(RQCommand):
                     'to a file at the specified path'),
         Option('queues', nargs='*', metavar='QUEUE',
                help='Queues to work with, defaults to the ones specified '
-                    'in the Flask app config')
+                    'in the Flask app config'),
+        Option('--connection-class',
+               default='redis.StrictRedis',
+               help='Redis client class to use'),
     )
 
     def run(self, burst, name, path, results_ttl, worker_ttl, verbose,
-            quiet, sentry_dsn, exception_handler, pid, queues):
-        cli.worker.callback(
+            quiet, sentry_dsn, exception_handler,
+            pid, queues, connection_class):
+        kwargs = dict(
             url=self.rq.url,
             config=None,
             burst=burst,
@@ -179,6 +184,12 @@ class WorkerCommand(RQCommand):
             pid=pid,
             queues=queues or self.rq.queues,
         )
+
+        if is_rq_version_greater_than('0.7.0'):  # pragma: no cover
+            # Not all rq versions have this param.
+            kwargs.update(connection_class=connection_class)
+
+        cli.worker.callback(**kwargs)
 
 
 @RQCommand.register()

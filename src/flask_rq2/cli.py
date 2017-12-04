@@ -9,8 +9,11 @@
 import operator
 import os
 from functools import update_wrapper
+
 import click
 from rq.cli import cli as rq_cli
+
+from flask_rq2.helpers import is_rq_version_greater_than
 
 try:
     from flask.cli import AppGroup, ScriptInfo
@@ -114,12 +117,14 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
               help='Write the process ID number to a file at '
                    'the specified path')
 @click.argument('queues', nargs=-1)
+@click.option('--connection-class', default='redis.StrictRedis',
+              help='Redis client class to use')
 @rq_command()
 def worker(rq, ctx, burst, name, path, results_ttl, worker_ttl,
-           verbose, quiet, sentry_dsn, exception_handler, pid, queues):
+           verbose, quiet, sentry_dsn, exception_handler,
+           pid, queues, connection_class):
     "Starts an RQ worker."
-    ctx.invoke(
-        rq_cli.worker,
+    kwargs = dict(
         url=rq.url,
         config=None,
         burst=burst,
@@ -136,6 +141,15 @@ def worker(rq, ctx, burst, name, path, results_ttl, worker_ttl,
         exception_handler=exception_handler or rq._exception_handlers,
         pid=pid,
         queues=queues or rq.queues,
+    )
+
+    if is_rq_version_greater_than('0.7.0'):  # pragma: no cover
+        # Not all rq versions have this param.
+        kwargs.update(connection_class=connection_class)
+
+    ctx.invoke(
+        rq_cli.worker,
+        **kwargs
     )
 
 
