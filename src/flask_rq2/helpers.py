@@ -122,4 +122,5 @@ class JobFunctions(object):
             repeat=repeat,
             queue_name=self.queue_name,
             id='cron-%s' % name,
+            timeout=self.timeout
         )
