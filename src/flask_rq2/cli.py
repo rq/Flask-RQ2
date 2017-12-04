@@ -177,7 +177,7 @@ def resume(rq, ctx):
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
 @click.option('--burst', '-b', is_flag=True,
               help='Run in burst mode (quit after all work is done)')
-@click.option('-i', '--interval', default=60.0, type=float, metavar='SECONDS',
+@click.option('-i', '--interval', metavar='SECONDS',
               help='How often the scheduler checks for new jobs to add to '
                    'the queue (in seconds, can be floating-point for more '
                    'precision).')

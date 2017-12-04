@@ -90,6 +90,49 @@ def test_scheduler_command(config, rq_cli_app, cli_runner):
     assert 'Periodically checks for scheduled jobs' in result.output
 
 
+def test_scheduler_command_default_interval(config, app, cli_runner,
+                                            monkeypatch):
+    class CustomRQ(flask_rq2_app.RQ):
+        def get_scheduler(self, interval):
+            # the passed interval must be None
+            assert interval is None
+            scheduler = super(CustomRQ, self).get_scheduler(interval)
+            assert scheduler._interval == self.scheduler_interval
+            return scheduler
+
+    CustomRQ(app)
+    app.cli.name = app.name
+
+    monkeypatch.setattr(flask_rq2_app.Scheduler, 'run',
+                        lambda *args, **kwargs: None)
+    obj = ScriptInfo(create_app=lambda info: app)
+    result = cli_runner.invoke(app.cli, args=['rq', 'scheduler'], obj=obj)
+    assert result.exit_code == 0
+
+
+def test_scheduler_command_override_interval(config, app, cli_runner,
+                                             monkeypatch):
+    test_interval = 10
+
+    class CustomRQ(flask_rq2_app.RQ):
+        def get_scheduler(self, interval):
+            assert interval == test_interval
+            return super(CustomRQ, self).get_scheduler(interval)
+
+    rq = CustomRQ(app)
+    app.cli.name = app.name
+    assert test_interval != rq.scheduler_interval
+
+    monkeypatch.setattr(flask_rq2_app.Scheduler, 'run',
+                        lambda *args, **kwargs: None)
+    obj = ScriptInfo(create_app=lambda info: app)
+    result = cli_runner.invoke(app.cli,
+                               args=['rq', 'scheduler', '--interval',
+                                     test_interval],
+                               obj=obj)
+    assert result.exit_code == 0
+
+
 def test_scheduler_command_pid(config, rq_cli_app, cli_runner, monkeypatch,
                                tmpdir):
     monkeypatch.setattr(flask_rq2_app.Scheduler, 'run',
