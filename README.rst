@@ -81,5 +81,5 @@ and then later call ``init_app`` where you create your application object:
 
 .. snap
 
-For more information see the - `full documentation
+For more information see the `full documentation
 <https://flask-rq2.readthedocs.io/>`_  on Read The Docs.

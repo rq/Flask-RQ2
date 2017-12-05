@@ -14,7 +14,7 @@ E.g.::
 
 .. snip
 
-17.1 (2017-12-04)
+17.1 (2017-12-05)
 ~~~~~~~~~~~~~~~~~
 
 - Require Flask >= 0.10, but it's recommended to use at least 0.11.
