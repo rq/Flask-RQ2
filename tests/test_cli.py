@@ -93,10 +93,11 @@ def test_scheduler_command(config, rq_cli_app, cli_runner):
 def test_scheduler_command_default_interval(config, app, cli_runner,
                                             monkeypatch):
     class CustomRQ(flask_rq2_app.RQ):
-        def get_scheduler(self, interval):
+        def get_scheduler(self, interval=None, queue=None):
             # the passed interval must be None
             assert interval is None
-            scheduler = super(CustomRQ, self).get_scheduler(interval)
+            scheduler = super(CustomRQ, self).get_scheduler(interval=interval,
+                                                            queue=queue)
             assert scheduler._interval == self.scheduler_interval
             return scheduler
 
@@ -115,9 +116,10 @@ def test_scheduler_command_override_interval(config, app, cli_runner,
     test_interval = 10
 
     class CustomRQ(flask_rq2_app.RQ):
-        def get_scheduler(self, interval):
+        def get_scheduler(self, interval=None, queue=None):
             assert interval == test_interval
-            return super(CustomRQ, self).get_scheduler(interval)
+            return super(CustomRQ, self).get_scheduler(interval=interval,
+                                                       queue=queue)
 
     rq = CustomRQ(app)
     app.cli.name = app.name

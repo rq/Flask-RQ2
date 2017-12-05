@@ -125,7 +125,7 @@ def test_get_scheduler(rq):
 
 
 def test_get_scheduler_interval(rq):
-    scheduler = rq.get_scheduler(23)
+    scheduler = rq.get_scheduler(interval=23)
     assert scheduler._interval != rq.scheduler_interval
     assert scheduler._interval == 23
 

@@ -45,12 +45,13 @@ class JobFunctions(object):
             add.queue(1, 2)
 
         """
+        queue_name = kwargs.pop('queue', self.queue_name)
         depends_on = kwargs.pop('depends_on', None)
         at_front = kwargs.pop('at_front', False)
         description = kwargs.pop('description', None)
         job_id = kwargs.pop('job_id', None)
         meta = kwargs.pop('meta', None)
-        return self.rq.get_queue(self.queue_name).enqueue_call(
+        return self.rq.get_queue(queue_name).enqueue_call(
             self.wrapped,
             args=args,
             kwargs=kwargs,
@@ -78,6 +79,7 @@ class JobFunctions(object):
             add.schedule(timedelta(days=14), 1, 2, repeat=1)
 
         """
+        queue_name = kwargs.pop('queue', self.queue_name)
         repeat = kwargs.pop('repeat', None)
         interval = kwargs.pop('interval', None)
         description = kwargs.pop('description', None)
@@ -99,7 +101,7 @@ class JobFunctions(object):
             timeout=self.timeout,
             id=job_id,
             description=description,
-            queue_name=self.queue_name,
+            queue_name=queue_name,
         )
 
     def cron(self, pattern, name, *args, **kwargs):
@@ -113,6 +115,7 @@ class JobFunctions(object):
             add.cron('* * * * *', 'add-some-numbers', 1, 2)
 
         """
+        queue_name = kwargs.pop('queue', self.queue_name)
         repeat = kwargs.pop('repeat', None)
         description = kwargs.pop('description', None)
         return self.rq.get_scheduler().cron(
@@ -121,7 +124,7 @@ class JobFunctions(object):
             args=args,
             kwargs=kwargs,
             repeat=repeat,
-            queue_name=self.queue_name,
+            queue_name=queue_name,
             id='cron-%s' % name,
             timeout=self.timeout,
             description=description,

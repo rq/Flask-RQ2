@@ -284,7 +284,7 @@ class RQ(object):
         else:
             return wrapper(func)
 
-    def get_scheduler(self, interval=None):
+    def get_scheduler(self, interval=None, queue=None):
         """
         When installed returns a ``rq_scheduler.Scheduler`` instance to
         schedule job execution, e.g.::
@@ -294,18 +294,27 @@ class RQ(object):
         :param interval: Time in seconds of the periodic check for scheduled
                          jobs.
         :type interval: int
+        :param queue: Name of the queue to enqueue in, defaults to
+                     :attr:`~flask_rq2.RQ.scheduler_queue`.
+        :type queue: str
         """
-        if self.scheduler_class is None:
-            raise RuntimeError('Cannot import rq-scheduler. Is it installed?')
-        scheduler_cls = import_attribute(self.scheduler_class)
-        if interval is None:
-            interval = self.scheduler_interval
         # monkey patch until we have an upstream way to set the job
         # class used by the scheduler
         from rq_scheduler import scheduler as scheduler_module
         scheduler_module.Job = import_attribute(self.job_class)
+
+        if interval is None:
+            interval = self.scheduler_interval
+
+        if not queue:
+            queue = self.scheduler_queue
+
+        if self.scheduler_class is None:
+            raise RuntimeError('Cannot import rq-scheduler. Is it installed?')
+        scheduler_cls = import_attribute(self.scheduler_class)
+
         scheduler = scheduler_cls(
-            queue_name=self.scheduler_queue,
+            queue_name=queue,
             interval=interval,
             connection=self.connection,
         )
@@ -324,7 +333,7 @@ class RQ(object):
         :return: An RQ queue instance.
         :rtype: ``rq.queue.Queue``
         """
-        if name is None:
+        if not name:
             name = self.default_queue
         queue = self._queue_instances.get(name)
         if queue is None:

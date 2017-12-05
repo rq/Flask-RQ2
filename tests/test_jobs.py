@@ -83,9 +83,14 @@ def test_queue_job(app):
     job4 = add.queue(7, 8, depends_on=job3)
     assert job4.dependency.id == job3.id
 
-    job5 = add.queue(9, 10)
-    result = job5.perform()
-    assert result == 19
+    other_queue = 'other_queue'
+    job5 = add.queue(9, 10, queue=other_queue)
+    # job will be scheduled in the other queue eventually
+    assert job5.origin == other_queue
+
+    job6 = add.queue(11, 12)
+    result = job6.perform()
+    assert result == 23
 
     queue = rq.get_queue()
     assert job1 in queue.jobs
@@ -110,6 +115,7 @@ def test_factory_pattern(app, config):
     rq.default_timeout = 456  # override default timeout
     rq.job(add)
     add.helper.timeout == 456
+
     add.helper.timeout = 789
     add.helper.timeout == 789
 
@@ -121,6 +127,7 @@ def purge(scheduler):
 def test_schedule_job(app):
     rq = RQ(app, async=True)
     scheduler = rq.get_scheduler()
+    purge(scheduler)
     assert scheduler.count() == 0
     rq.job(add)
 
@@ -145,10 +152,20 @@ def test_schedule_job(app):
     assert job3.description == job3_description
     purge(scheduler)
 
+    other_queue = 'other-queue'
+    job4 = add.schedule(timedelta(seconds=1), 5, 6, queue=other_queue)
+    # job will be scheduled in the other queue eventually
+    assert job4.origin == other_queue
+    # one more. the scheduler will have all jobs, no matter what
+    # queue the job will eventually be queued in.
+    assert job4 in scheduler.get_jobs()
+    purge(scheduler)
+
 
 def test_cron_job(app):
     rq = RQ(app, async=True)
     scheduler = rq.get_scheduler()
+    purge(scheduler)
     assert scheduler.count() == 0
     rq.job(add)
 
@@ -159,7 +176,7 @@ def test_cron_job(app):
     assert job1 in scheduler.get_jobs()
     assert job1.meta['cron_string'] == cron_string
     assert job1.id == 'cron-' + cron_name
-    # purge(scheduler)
+    purge(scheduler)
 
     job2 = add.cron(cron_string, cron_name, 3, 4)
     assert scheduler.count() == 1  # no duplicate here
@@ -171,5 +188,14 @@ def test_cron_job(app):
     assert scheduler.count() == 2  # second cron
     assert job3 in scheduler.get_jobs()
     assert job3.id == 'cron-' + cron_name + '-pro'
+
+    other_queue = 'other-queue'
+    job4 = add.cron(cron_string, cron_name + '-other', 3, 4, queue=other_queue)
+    # job will be scheduled in the other queue eventually
+    assert job4.origin == other_queue
+    # one more. the scheduler will have all jobs, no matter what
+    # queue the job will eventually be queued in.
+    assert job4 in scheduler.get_jobs()
+    assert scheduler.count() == 3
 
     purge(scheduler)
