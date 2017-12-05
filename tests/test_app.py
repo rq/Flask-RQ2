@@ -130,9 +130,22 @@ def test_get_scheduler_interval(rq):
     assert scheduler._interval == 23
 
 
+def test_get_scheduler_queue(rq):
+    scheduler = rq.get_scheduler(queue='other')
+    assert scheduler.queue_name == 'other'
+
+
 def test_get_scheduler_importerror(rq):
     # in case scheduler can't be imported
     rq.scheduler_class = 'non.existing.Scheduler'
 
     with pytest.raises(ImportError):
+        rq.get_scheduler()
+
+
+def test_get_scheduler_runtimeerror(rq):
+    # in case scheduler can't be imported
+    rq.scheduler_class = None
+
+    with pytest.raises(RuntimeError):
         rq.get_scheduler()

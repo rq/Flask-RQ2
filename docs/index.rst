@@ -34,16 +34,16 @@ A specific queue name can also be passed as argument:
 
 .. code-block:: python
 
-    @rq.job('low')
+    @rq.job('low', timeout=60)
     def add(x, y):
         return x + y
 
-Or if you decide to use a different queue dynamically
-during runtime:
+Or if you decide to use a different queue and timeout
+dynamically during runtime:
 
 .. code-block:: python
 
-    job2 = add.queue(3, 4, queue='high')
+    job2 = add.queue(3, 4, queue='high', timeout=60 * 2)
 
 Some other parameters are available as well:
 
@@ -72,13 +72,13 @@ timespan or by a cron-like plan:
     add.schedule(timedelta(days=14), 1, 2, repeat=1)
 
     # queue job in 12 hours with a different queue
-    add.schedule(timedelta(hours=12), 1, 2, queue='high')
+    add.schedule(timedelta(hours=12), 1, 2, queue='high', timeout=60 * 2)
 
     # queue job every day at noon (UTC!)
     add.cron('0 0 12 * * ?', 'add-one-two', 1, 2)
 
     # queue job every minute with a different queue
-    add.cron('* * * * *', 'add-one-two', 1, 2, queue='high')
+    add.cron('* * * * *', 'add-one-two', 1, 2, queue='high', timeout=55)
 
 See the full `API docs`_ for more information.
 

@@ -64,7 +64,7 @@ def add(x, y):
 
 def test_queue_job(app):
     rq = RQ(app, async=True)
-
+    rq.connection.flushdb()
     rq.job(add)
 
     job1 = add.queue(1, 2)
@@ -109,15 +109,64 @@ def test_queue_job(app):
     assert len(queue.jobs) == 0
 
 
-def test_factory_pattern(app, config):
-    rq = RQ(default_timeout=123)
-    rq.init_app(app)
-    rq.default_timeout = 456  # override default timeout
-    rq.job(add)
-    add.helper.timeout == 456
+def test_job_override(app, config):
+    rq = RQ(app, async=True)
 
-    add.helper.timeout = 789
-    add.helper.timeout == 789
+    rq.job(add, timeout=123, result_ttl=456, ttl=789)
+    assert add.helper.timeout == 123
+    assert add.helper.result_ttl == 456
+    assert add.helper.ttl == 789
+
+    job1 = add.queue(timeout=111, result_ttl=222, ttl=333)
+    assert job1.timeout == 111
+    assert job1.result_ttl == 222
+    assert job1.ttl == 333
+
+
+def test_factory_pattern(app, config):
+    rq = RQ(default_timeout=111)
+    rq.init_app(app)
+
+    # override some rq defaults
+    rq.default_timeout = 222
+    rq.default_result_ttl = 333
+    rq.default_queue = 'non-default'
+    rq.job(add)
+
+    # then check if those default have been passed to the helper
+    assert add.helper.timeout == 222
+    assert add.helper.result_ttl == 333
+    assert add.helper.queue_name == 'non-default'
+
+    # then queue if the values have been passed to the job as well
+    job = add.queue(1, 2)
+    assert job.timeout == 222
+    assert job.result_ttl == 333
+    assert job.ttl is None
+    assert job.origin == 'non-default'
+
+    # change the values in the helpr and see if that works
+    add.helper.timeout = 444
+    assert add.helper.timeout == 444
+    add.helper.result_ttl = 555
+    assert add.helper.result_ttl == 555
+    add.helper.queue_name = 'totally-different'
+    assert add.helper.queue_name == 'totally-different'
+
+    # assert the helper's values
+    job = add.queue(1, 2)
+    assert job.timeout == 444
+    assert job.result_ttl == 555
+    assert job.ttl is None
+    assert job.origin == 'totally-different'
+
+    # now finally override the values while queueing
+    job = add.queue(1, 2,
+                    queue='yet-another', timeout=666, result_ttl=777, ttl=888)
+    assert job.timeout == 666
+    assert job.result_ttl == 777
+    assert job.ttl == 888
+    assert job.origin == 'yet-another'
 
 
 def purge(scheduler):

@@ -14,6 +14,12 @@ E.g.::
 
 .. snip
 
+17.2 (2017.12.05)
+~~~~~~~~~~~~~~~~~
+
+- Allow dynamically setting timeout, result TTL and job TTL and other
+  parameters when enqueuing, scheduling or adding as a cron job.
+
 17.1 (2017-12-05)
 ~~~~~~~~~~~~~~~~~
 

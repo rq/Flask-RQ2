@@ -229,7 +229,7 @@ class RQ(object):
 
         or::
 
-            @rq.job(timeout=60, results_ttl=60*60)
+            @rq.job(timeout=60, results_ttl=60 * 60)
             def add(x, y):
                 return x + y
 
@@ -251,17 +251,10 @@ class RQ(object):
         """
         if callable(func_or_queue):
             func = func_or_queue
-            queue_name = self.default_queue
+            queue_name = None
         else:
             func = None
             queue_name = func_or_queue
-
-        # Catch empty strings and None
-        if not queue_name:
-            queue_name = self.default_queue
-
-        if result_ttl is None:
-            result_ttl = self.default_result_ttl
 
         def wrapper(wrapped):
             self._jobs.append(wrapped)
