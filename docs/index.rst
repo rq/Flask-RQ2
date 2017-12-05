@@ -45,6 +45,11 @@ dynamically during runtime:
 
     job2 = add.queue(3, 4, queue='high', timeout=60 * 2)
 
+.. versionchanged:: 17.2
+
+    The ``qeue`` job function now takes a few more parameters.
+    See the full `API docs`_ for more information.
+
 Some other parameters are available as well:
 
 .. code-block:: python
@@ -80,7 +85,12 @@ timespan or by a cron-like plan:
     # queue job every minute with a different queue
     add.cron('* * * * *', 'add-one-two', 1, 2, queue='high', timeout=55)
 
-See the full `API docs`_ for more information.
+.. versionchanged:: 17.2
+
+    The ``schedule`` and ``cron`` functions now take a few more parameters.
+    See the full `API docs`_ for more information.
+
+See the full `API docs`_ for more information about the job functions.
 
 .. _`API docs`: http://flask-rq2.readthedocs.io/en/stable/api/
 .. _`RQ job`: http://python-rq.org/docs/jobs/
@@ -166,6 +176,11 @@ Returns an `RQ Scheduler`_ instance for periodically enqueuing jobs:
     # check every 10 seconds if there are any jobs to enqueue
     scheduler = rq.get_scheduler(interval=10)
     scheduler.run()
+
+.. versionchanged:: 17.2
+
+    The ``get_scheduler`` method now takes an optional ``queue`` parameter
+    to override the default scheduler queue.
 
 CLI support
 -----------
