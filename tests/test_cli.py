@@ -56,12 +56,12 @@ def test_info_command(config, rq_cli_app, cli_runner):
 
 
 def test_worker_command(config, rq_cli_app, cli_runner, caplog):
+    caplog.set_level(logging.INFO, logger='rq.worker')
     obj = ScriptInfo(create_app=lambda info: rq_cli_app)
     result = cli_runner.invoke(rq_cli_app.cli,
                                args=['rq', 'worker', '--burst'],
                                obj=obj)
     assert result.exit_code == 0
-    caplog.set_level(logging.INFO, logger='rq.worker')
     out = caplog.text
     assert result.output == ''
     assert 'Listening on %s' % config.RQ_QUEUES[0] in out
