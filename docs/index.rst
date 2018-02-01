@@ -227,9 +227,9 @@ Configuration
 ``RQ_REDIS_URL``
 ~~~~~~~~~~~~~~~~
 
-The URL to pass to the ``form_url`` method of the redis-py_'s connection
-class as defind in ``RQ_CONNECTION_CLASS``. Defaults to connecting to the
-local Redis instance, database 0.
+The URL to pass to the :meth:`~redis.StrictRedis.from_url` method of the
+redis-py_'s connection class as defind in ``RQ_CONNECTION_CLASS``.
+Defaults to connecting to the local Redis instance, database 0.
 
 .. code-block:: python
 

@@ -297,6 +297,7 @@ texinfo_documents = [
 intersphinx_mapping = {
     'https://docs.python.org/3/': None,
     'http://flask.pocoo.org/docs/0.12/': None,
+    'https://redis-py.readthedocs.org/en/latest/': None,
 }
 
 html_theme_path = [sphinx_readable_theme.get_html_theme_path()]
