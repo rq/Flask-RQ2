@@ -35,5 +35,5 @@ deploy:
     secure: VRo3u0o6ZL8f2mJajAopdjDLk7/CPcpaX3POe2N4iPinOMudB3M7vNg9yUVKiurPjqlKGtreqAvyBxC89W36D5IQJZpUV1rO2Qrdzne6SdsXIhWceFs3WB8D+19gzYPPK2PbHw7BD4CYcW5tqeB6ffs88m5+PonuoEA30s+2AfYh3hp/gF1AUHVDLmnigKhxGs81ivPggiLRk2dPwYmT4uRRjyD0VfFt2mNKDN+mPq6GBOJV+65cX1pZx9QCGuCPeBllKdQVSht6TMVXRGXqQ7v0ubEMcK+jItlMlp0JS43gqmpXbeYAQiZEhctLHKL2Sp8M3nFDNyovbBDEL/yZ0/Xd2ORZzMxLoN9y/UUJzQr8E4mFgqGQkpD0bA2YzJgQfsNg9Ua6cDIjU0U9ZkewPtaz/30OA7rWbx6eUbeo3FpZCoaBuFVgpiIe0VEhOuzQrkHhmtHfMOcYc0qECaXdZ+OT7nXlamslNneLe4Kzg/H9RZvLQSUf/2P1UjftaIjn9uMjBwMSQ99iVl49qTf/dVtZ3SsHDfGKf+BOY5vwEaVFj+cWI9b3wb7r9P/HW8V0CG4V2E0L/Ns/7HkkCoOLBrn1xpLQZ0neq6N5OoCj2/QAgkwL1cZ11gstASM6bW/rBb+OtJI9Zup+1nBqshWtVEtPBWg8fx/vhwpxsb/KMiI=
   on:
     tags: true
-    repo: jezdez/Flask-RQ2
+    repo: rq/Flask-RQ2
     python: 3.6

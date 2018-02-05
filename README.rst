@@ -5,12 +5,12 @@ Flask-RQ2
    :target: https://flask-rq2.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://travis-ci.org/jezdez/Flask-RQ2.svg?branch=master
-   :target: https://travis-ci.org/jezdez/Flask-RQ2
+.. image:: https://travis-ci.org/rq/Flask-RQ2.svg?branch=master
+   :target: https://travis-ci.org/rq/Flask-RQ2
    :alt: Test Status
 
-.. image:: https://codecov.io/gh/jezdez/Flask-RQ2/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/jezdez/Flask-RQ2
+.. image:: https://codecov.io/gh/rq/Flask-RQ2/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/rq/Flask-RQ2
    :alt: Test Coverage Status
 
 .. image:: https://img.shields.io/badge/calver-YY.MINOR.MICRO-22bfda.svg
@@ -21,8 +21,9 @@ Resources
 ---------
 
 - `Documentation <https://flask-rq2.readthedocs.io/>`_
-- `Issue Tracker <https://github.com/jezdez/flask-rq2/issues>`_
-- `Code <https://github.com/jezdez/flask-rq2/>`_
+- `Issue Tracker <https://github.com/rq/flask-rq2/issues>`_
+- `Code <https://github.com/rq/flask-rq2/>`_
+- `Continuous Integration <https://travis-ci.org/rq/Flask-RQ2>`_
 
 .. snip
 
