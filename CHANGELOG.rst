@@ -14,7 +14,26 @@ E.g.::
 
 .. snip
 
-17.2 (2017.12.05)
+18.0 (2018-03-02)
+~~~~~~~~~~~~~~~~~
+
+- The project has been moved to the official RQ GitHub organization!
+
+  New URL: https://github.com/rq/flask-rq2
+
+- Stop monkey-patching the scheduler module since rq-scheduler gained the
+  ability to use custom job classes.
+
+  ** Requires rq-scheduler 0.8.2 or higher. **
+
+- Adds `depends_on`, `at_front`, `meta` and `description` parameters to job
+  decorator.
+
+  ** Requires rq==0.10.0 or higher. **
+
+- Minor fixes for test infrastructure.
+
+17.2 (2017-12-05)
 ~~~~~~~~~~~~~~~~~
 
 - Allow dynamically setting timeout, result TTL and job TTL and other
