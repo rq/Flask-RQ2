@@ -11,11 +11,6 @@ from rq.utils import import_attribute
 from rq.worker import DEFAULT_RESULT_TTL
 
 try:
-    from rq_scheduler import Scheduler
-except ImportError:  # pragma: no cover
-    Scheduler = None
-
-try:
     import click
 except ImportError:  # pragma: no cover
     click = None
@@ -72,7 +67,10 @@ class RQ(object):
     #:
     #: .. versionchanged:: 17.1
     #:    Renamed from ``scheduler_path`` to ``scheduler_class``.
-    scheduler_class = 'rq_scheduler.Scheduler'
+    #:
+    #: .. versionchanged:: 18.0
+    #:    Changed to use own scheduler class.
+    scheduler_class = 'flask_rq2.scheduler.FlaskScheduler'
 
     #: Name of RQ queue to schedule jobs in by rq-scheduler.
     scheduler_queue = default_queue
@@ -291,19 +289,12 @@ class RQ(object):
                      :attr:`~flask_rq2.RQ.scheduler_queue`.
         :type queue: str
         """
-        # monkey patch until we have an upstream way to set the job
-        # class used by the scheduler
-        from rq_scheduler import scheduler as scheduler_module
-        scheduler_module.Job = import_attribute(self.job_class)
-
         if interval is None:
             interval = self.scheduler_interval
 
         if not queue:
             queue = self.scheduler_queue
 
-        if self.scheduler_class is None:
-            raise RuntimeError('Cannot import rq-scheduler. Is it installed?')
         scheduler_cls = import_attribute(self.scheduler_class)
 
         scheduler = scheduler_cls(

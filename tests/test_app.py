@@ -141,11 +141,3 @@ def test_get_scheduler_importerror(rq):
 
     with pytest.raises(ImportError):
         rq.get_scheduler()
-
-
-def test_get_scheduler_runtimeerror(rq):
-    # in case scheduler can't be imported
-    rq.scheduler_class = None
-
-    with pytest.raises(RuntimeError):
-        rq.get_scheduler()

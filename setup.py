@@ -58,7 +58,7 @@ setup_params = dict(
     install_requires=[
         'Flask>=0.10',
         'rq>=0.8.0',
-        'rq-scheduler>=0.7.0',
+        'rq-scheduler>=0.8.2',
     ],
     extras_require=extras_require,
     tests_require=tests_require,

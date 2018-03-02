@@ -6,6 +6,7 @@ import pytest
 from flask_cli import FlaskGroup, ScriptInfo, cli
 from flask_rq2 import app as flask_rq2_app
 from flask_rq2 import cli as flask_rq2_cli
+from flask_rq2 import scheduler as flask_rq2_scheduler
 from flask_rq2.cli import _commands, add_commands
 
 
@@ -104,7 +105,7 @@ def test_scheduler_command_default_interval(config, app, cli_runner,
     CustomRQ(app)
     app.cli.name = app.name
 
-    monkeypatch.setattr(flask_rq2_app.Scheduler, 'run',
+    monkeypatch.setattr(flask_rq2_scheduler.FlaskScheduler, 'run',
                         lambda *args, **kwargs: None)
     obj = ScriptInfo(create_app=lambda info: app)
     result = cli_runner.invoke(app.cli, args=['rq', 'scheduler'], obj=obj)
@@ -125,7 +126,7 @@ def test_scheduler_command_override_interval(config, app, cli_runner,
     app.cli.name = app.name
     assert test_interval != rq.scheduler_interval
 
-    monkeypatch.setattr(flask_rq2_app.Scheduler, 'run',
+    monkeypatch.setattr(flask_rq2_scheduler.FlaskScheduler, 'run',
                         lambda *args, **kwargs: None)
     obj = ScriptInfo(create_app=lambda info: app)
     result = cli_runner.invoke(app.cli,
@@ -137,7 +138,7 @@ def test_scheduler_command_override_interval(config, app, cli_runner,
 
 def test_scheduler_command_pid(config, rq_cli_app, cli_runner, monkeypatch,
                                tmpdir):
-    monkeypatch.setattr(flask_rq2_app.Scheduler, 'run',
+    monkeypatch.setattr(flask_rq2_scheduler.FlaskScheduler, 'run',
                         lambda *args, **kwargs: None)
     obj = ScriptInfo(create_app=lambda info: rq_cli_app)
     pid = tmpdir.join('rq2_scheduler.pid')
@@ -151,7 +152,7 @@ def test_scheduler_command_pid(config, rq_cli_app, cli_runner, monkeypatch,
 def test_scheduler_command_verbose(config, rq_cli_app, cli_runner,
                                    monkeypatch):
     obj = ScriptInfo(create_app=lambda info: rq_cli_app)
-    monkeypatch.setattr(flask_rq2_app.Scheduler, 'run',
+    monkeypatch.setattr(flask_rq2_scheduler.FlaskScheduler, 'run',
                         lambda *args, **kwargs: None)
 
     def setup_loghandlers(level):
