@@ -14,7 +14,8 @@ class JobFunctions(object):
     #: the methods to add to jobs automatically
     functions = ['queue', 'schedule', 'cron']
 
-    def __init__(self, rq, wrapped, queue_name, timeout, result_ttl, ttl):
+    def __init__(self, rq, wrapped, queue_name, timeout, result_ttl, ttl,
+                 depends_on, at_front, meta, description):
         self.rq = rq
         self.wrapped = wrapped
         self._queue_name = queue_name
@@ -23,6 +24,10 @@ class JobFunctions(object):
         # job TTLs don't have a default value
         # https://github.com/nvie/rq/issues/873
         self.ttl = ttl
+        self._depends_on = depends_on
+        self._at_front = at_front
+        self._meta = meta
+        self._description = description
 
     def __repr__(self):
         full_name = '.'.join([self.wrapped.__module__, self.wrapped.__name__])
@@ -66,7 +71,6 @@ class JobFunctions(object):
                 return x + y
 
             add.queue(1, 2, timeout=30)
-
 
         :param \*args: The positional arguments to pass to the queued job.
 
@@ -113,13 +117,13 @@ class JobFunctions(object):
         queue_name = kwargs.pop('queue', self.queue_name)
 
         timeout = kwargs.pop('timeout', self.timeout)
-        description = kwargs.pop('description', None)
         result_ttl = kwargs.pop('result_ttl', self.result_ttl)
         ttl = kwargs.pop('ttl', self.ttl)
-        depends_on = kwargs.pop('depends_on', None)
+        depends_on = kwargs.pop('depends_on', self._depends_on)
         job_id = kwargs.pop('job_id', None)
-        at_front = kwargs.pop('at_front', False)
-        meta = kwargs.pop('meta', None)
+        at_front = kwargs.pop('at_front', self._at_front)
+        meta = kwargs.pop('meta', self._meta)
+        description = kwargs.pop('description', self._description)
         return self.rq.get_queue(queue_name).enqueue_call(
             self.wrapped,
             args=args,
@@ -127,11 +131,11 @@ class JobFunctions(object):
             timeout=timeout,
             result_ttl=result_ttl,
             ttl=ttl,
-            description=description,
             depends_on=depends_on,
             job_id=job_id,
             at_front=at_front,
-            meta=meta
+            meta=meta,
+            description=description,
         )
 
     def schedule(self, time_or_delta, *args, **kwargs):

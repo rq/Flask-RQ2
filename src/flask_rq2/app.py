@@ -215,7 +215,8 @@ class RQ(object):
         self._exception_handlers.append(path)
         return callback
 
-    def job(self, func_or_queue=None, timeout=None, result_ttl=None, ttl=None):
+    def job(self, func_or_queue=None, timeout=None, result_ttl=None, ttl=None,
+            depends_on=None, at_front=None, meta=None, description=None):
         """
         Decorator to mark functions for queuing via RQ, e.g.::
 
@@ -234,6 +235,11 @@ class RQ(object):
         Adds various functions to the job as documented in
         :class:`~flask_rq2.functions.JobFunctions`.
 
+
+        .. versionchanged:: 18.0
+            Adds ``depends_on``, ``at_front``, ``meta`` and ``description``
+            parameters.
+
         :param queue: Name of the queue to add job to, defaults to
                       :attr:`flask_rq2.app.RQ.default_queue`.
         :type queue: str
@@ -246,6 +252,20 @@ class RQ(object):
         :param ttl: The maximum queued time of the job before it'll be
                     cancelled.
         :type ttl: int
+
+        :param depends_on: A job instance or id that the new job depends on.
+        :type depends_on: ~flask_rq2.job.FlaskJob or str
+
+        :param at_front: Whether or not the job is queued in front of all other
+                         enqueued jobs.
+        :type at_front: bool
+
+        :param meta: Additional meta data about the job.
+        :type meta: dict
+
+        :param description: Description of the job.
+        :type description: str
+
         """
         if callable(func_or_queue):
             func = func_or_queue
@@ -263,6 +283,10 @@ class RQ(object):
                 timeout=timeout,
                 result_ttl=result_ttl,
                 ttl=ttl,
+                depends_on=depends_on,
+                at_front=at_front,
+                meta=meta,
+                description=description,
             )
             wrapped.helper = helper
             for function in helper.functions:
