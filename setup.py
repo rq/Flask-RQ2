@@ -44,7 +44,7 @@ setup(
     name='Flask-RQ2',
     use_scm_version={
         'version_scheme': 'post-release',
-        'local_scheme': 'dirty-tag'
+        'local_scheme': 'dirty-tag',
     },
     url='https://flask-rq2.readthedocs.io/',
     license='MIT',
