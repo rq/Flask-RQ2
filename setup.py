@@ -40,9 +40,12 @@ for reqs in extras_require.values():
 needs_pytest = set(['pytest', 'test', 'ptr']).intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
 
-setup_params = dict(
+setup(
     name='Flask-RQ2',
-    version='17.2',
+    use_scm_version={
+        'version_scheme': 'post-release',
+        'local_scheme': 'dirty-tag'
+    },
     url='https://flask-rq2.readthedocs.io/',
     license='MIT',
     author='Jannis Leidel',
@@ -54,7 +57,7 @@ setup_params = dict(
     zip_safe=False,
     include_package_data=True,
     platforms='any',
-    setup_requires=[] + pytest_runner,
+    setup_requires=['setuptools_scm'] + pytest_runner,
     install_requires=[
         'Flask>=0.10',
         'rq>=0.10.0',
@@ -88,6 +91,3 @@ setup_params = dict(
         'Topic :: System :: Systems Administration',
     ]
 )
-
-if __name__ == '__main__':
-    setup(**setup_params)
