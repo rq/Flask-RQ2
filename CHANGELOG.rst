@@ -24,12 +24,12 @@ E.g.::
 - Stop monkey-patching the scheduler module since rq-scheduler gained the
   ability to use custom job classes.
 
-  ** Requires rq-scheduler 0.8.2 or higher. **
+  **Requires rq-scheduler 0.8.2 or higher.**
 
 - Adds `depends_on`, `at_front`, `meta` and `description` parameters to job
   decorator.
 
-  ** Requires rq==0.10.0 or higher. **
+  **Requires rq==0.10.0 or higher.**
 
 - Minor fixes for test infrastructure.
 
