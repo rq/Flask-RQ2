@@ -47,7 +47,7 @@ dynamically during runtime:
 
 .. versionchanged:: 17.2
 
-    The ``qeue`` job function now takes a few more parameters.
+    The ``queue`` job function now takes a few more parameters.
     See the full `API docs`_ for more information.
 
 Some other parameters are available as well:
