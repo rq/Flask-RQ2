@@ -179,7 +179,7 @@ def resume(rq, ctx):
               help='Run in burst mode (quit after all work is done)')
 @click.option('-q', '--queue', metavar='QUEUE',
               help='The name of the queue to run the scheduler with.')
-@click.option('-i', '--interval', metavar='SECONDS',
+@click.option('-i', '--interval', metavar='SECONDS', type=int,
               help='How often the scheduler checks for new jobs to add to '
                    'the queue (in seconds, can be floating-point for more '
                    'precision).')
