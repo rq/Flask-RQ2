@@ -118,8 +118,8 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.option('--name', '-n', help='Specify a different name')
 @click.option('--path', '-P', default='.', help='Specify the import path.')
 @click.option('--results-ttl', help='Default results timeout to be used')
-@click.option('--worker-ttl', type=int,
-              help='Default worker timeout to be used')
+@click.option('--worker-ttl', type=int, default=420,
+              help='Default worker timeout to be used (default: 420)')
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
 @click.option('--quiet', '-q', is_flag=True, help='Show less output')
 @click.option('--sentry-dsn', default=None, help='Sentry DSN address')
