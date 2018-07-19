@@ -60,7 +60,7 @@ setup(
     setup_requires=['setuptools_scm'] + pytest_runner,
     install_requires=[
         'Flask>=0.10',
-        'rq>=0.10.0',
+        'rq>=0.12.0',
         'rq-scheduler>=0.8.2',
     ],
     extras_require=extras_require,
@@ -72,6 +72,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'Intended Audience :: End Users/Desktop',
