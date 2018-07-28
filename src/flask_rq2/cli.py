@@ -12,6 +12,8 @@ from functools import update_wrapper
 
 import click
 from rq.cli import cli as rq_cli
+from rq.defaults import DEFAULT_RESULT_TTL, DEFAULT_WORKER_TTL
+
 
 try:
     from flask.cli import AppGroup, ScriptInfo
@@ -117,8 +119,9 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
               help='Set logging level')
 @click.option('--name', '-n', help='Specify a different name')
 @click.option('--path', '-P', default='.', help='Specify the import path.')
-@click.option('--results-ttl', help='Default results timeout to be used')
-@click.option('--worker-ttl', type=int, default=420,
+@click.option('--results-ttl', type=int, default=DEFAULT_RESULT_TTL,
+              help='Default results timeout to be used')
+@click.option('--worker-ttl', type=int, default=DEFAULT_WORKER_TTL,
               help='Default worker timeout to be used (default: 420)')
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
 @click.option('--quiet', '-q', is_flag=True, help='Show less output')
