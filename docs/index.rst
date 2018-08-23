@@ -54,7 +54,7 @@ Some other parameters are available as well:
 
 .. code-block:: python
 
-    @rq.job('low', timeout=180, results_ttl=60 * 60, ttl=60 * 60 * 24)
+    @rq.job('low', timeout=180, result_ttl=60 * 60, ttl=60 * 60 * 24)
     def add(x, y):
         return x + y
 

@@ -228,7 +228,7 @@ class RQ(object):
 
         or::
 
-            @rq.job(timeout=60, results_ttl=60 * 60)
+            @rq.job(timeout=60, result_ttl=60 * 60)
             def add(x, y):
                 return x + y
 
