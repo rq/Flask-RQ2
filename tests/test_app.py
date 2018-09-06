@@ -43,7 +43,7 @@ def test_config_async(app, config, rq):
 
 
 def test_config_async_override(app, config, rq):
-    rq2 = RQ(app, async=not config.RQ_ASYNC)
+    rq2 = RQ(app, is_async=not config.RQ_ASYNC)
     assert rq2._async != config.RQ_ASYNC
 
 
@@ -98,7 +98,7 @@ def test_get_queue(rq):
     assert isinstance(queue, import_attribute(rq.queue_class))
     assert queue.name == rq.default_queue
     assert queue._default_timeout == rq.default_timeout
-    assert queue._async == rq._async
+    assert queue._is_async == rq._async
     assert queue.connection == rq.connection
 
 
