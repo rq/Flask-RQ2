@@ -14,6 +14,12 @@ E.g.::
 
 .. snip
 
+19.0 (2018-??-??)
+~~~~~~~~~~~~~~~~~
+- Added support for Python 3.7. Since 'async' is a keyword in Python 3.7,
+  `RQ(async=True)` has been changed to `RQ(is_async=True)`. The `async`
+  keyword argument will still work, but raises a `DeprecationWarning`.
+
 18.0 (2018-03-02)
 ~~~~~~~~~~~~~~~~~
 
