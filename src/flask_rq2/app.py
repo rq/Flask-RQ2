@@ -105,9 +105,9 @@ class RQ(object):
         """
         if default_timeout is not None:
             self.default_timeout = default_timeout
-        self._async = is_async
+        self._is_async = is_async
         if 'async' in kwargs:
-            self._async = kwargs['async']
+            self._is_async = kwargs['async']
             warnings.warn('The `async` keyword is deprecated. '
                           'Use `is_async` instead', DeprecationWarning)
 
@@ -182,8 +182,8 @@ class RQ(object):
         #: Whether or not to run RQ jobs asynchronously or not,
         #: defaults to asynchronous
         _async = app.config.setdefault('RQ_ASYNC', True)
-        if self._async is None:
-            self._async = _async
+        if self._is_async is None:
+            self._is_async = _async
 
         # register extension with app
         app.extensions = getattr(app, 'extensions', {})
@@ -357,7 +357,7 @@ class RQ(object):
             queue = queue_cls(
                 name=name,
                 default_timeout=self.default_timeout,
-                is_async=self._async,
+                is_async=self._is_async,
                 connection=self.connection,
                 job_class=self.job_class
             )
