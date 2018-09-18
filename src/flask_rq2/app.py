@@ -99,8 +99,8 @@ class RQ(object):
         :param default_timeout: The default timeout in seconds to use for jobs,
                                 defaults to RQ's default of 180 seconds per job
         :type default_timeout: int
-        :param is_async: Whether or not to run jobs asynchronously or in-process,
-                         defaults to ``True``
+        :param is_async: Whether or not to run jobs asynchronously or
+                         in-process, defaults to ``True``
         :type is_async: bool
         """
         if default_timeout is not None:
