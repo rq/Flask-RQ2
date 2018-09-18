@@ -43,7 +43,7 @@ def test_config_async(app, config, rq):
 
 
 def test_config_async_override(app, config, rq):
-    rq2 = RQ(app, async=not config.RQ_ASYNC)
+    rq2 = RQ(app, is_async=not config.RQ_ASYNC)
     assert rq2._async != config.RQ_ASYNC
 
 

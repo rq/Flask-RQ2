@@ -63,7 +63,7 @@ def add(x, y):
 
 
 def test_queue_job(app):
-    rq = RQ(app, async=True)
+    rq = RQ(app, is_async=True)
     rq.connection.flushdb()
     rq.job(add)
 
@@ -110,7 +110,7 @@ def test_queue_job(app):
 
 
 def test_job_override(app, config):
-    rq = RQ(app, async=True)
+    rq = RQ(app, is_async=True)
 
     rq.job(add, timeout=123, result_ttl=456, ttl=789)
     assert add.helper.timeout == 123
@@ -174,7 +174,7 @@ def purge(scheduler):
 
 
 def test_schedule_job(app):
-    rq = RQ(app, async=True)
+    rq = RQ(app, is_async=True)
     scheduler = rq.get_scheduler()
     purge(scheduler)
     assert scheduler.count() == 0
@@ -212,7 +212,7 @@ def test_schedule_job(app):
 
 
 def test_cron_job(app):
-    rq = RQ(app, async=True)
+    rq = RQ(app, is_async=True)
     scheduler = rq.get_scheduler()
     purge(scheduler)
     assert scheduler.count() == 0
