@@ -12,6 +12,8 @@ from functools import update_wrapper
 
 import click
 from rq.cli import cli as rq_cli
+from rq.defaults import DEFAULT_RESULT_TTL, DEFAULT_WORKER_TTL
+
 
 try:
     from flask.cli import AppGroup, ScriptInfo
@@ -117,9 +119,10 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
               help='Set logging level')
 @click.option('--name', '-n', help='Specify a different name')
 @click.option('--path', '-P', default='.', help='Specify the import path.')
-@click.option('--results-ttl', help='Default results timeout to be used')
-@click.option('--worker-ttl', type=int,
-              help='Default worker timeout to be used')
+@click.option('--results-ttl', type=int, default=DEFAULT_RESULT_TTL,
+              help='Default results timeout to be used')
+@click.option('--worker-ttl', type=int, default=DEFAULT_WORKER_TTL,
+              help='Default worker timeout to be used (default: 420)')
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
 @click.option('--quiet', '-q', is_flag=True, help='Show less output')
 @click.option('--sentry-dsn', default=None, help='Sentry DSN address')
@@ -179,7 +182,7 @@ def resume(rq, ctx):
               help='Run in burst mode (quit after all work is done)')
 @click.option('-q', '--queue', metavar='QUEUE',
               help='The name of the queue to run the scheduler with.')
-@click.option('-i', '--interval', metavar='SECONDS',
+@click.option('-i', '--interval', metavar='SECONDS', type=int,
               help='How often the scheduler checks for new jobs to add to '
                    'the queue (in seconds, can be floating-point for more '
                    'precision).')
