@@ -6,6 +6,8 @@
     The core interface of Flask-RQ2.
 
 """
+import warnings
+
 from rq.queue import Queue
 from rq.utils import import_attribute
 from rq.worker import DEFAULT_RESULT_TTL
@@ -87,7 +89,8 @@ class RQ(object):
     #     ``flask_rq2.functions.JobFunctions``.
     functions_class = 'flask_rq2.functions.JobFunctions'
 
-    def __init__(self, app=None, default_timeout=None, async=None):
+    def __init__(self, app=None, default_timeout=None, is_async=None,
+                 **kwargs):
         """
         Initialize the RQ interface.
 
@@ -96,13 +99,18 @@ class RQ(object):
         :param default_timeout: The default timeout in seconds to use for jobs,
                                 defaults to RQ's default of 180 seconds per job
         :type default_timeout: int
-        :param async: Whether or not to run jobs asynchronously or in-process,
-                      defaults to ``True``
-        :type async: bool
+        :param is_async: Whether or not to run jobs asynchronously or
+                         in-process, defaults to ``True``
+        :type is_async: bool
         """
         if default_timeout is not None:
             self.default_timeout = default_timeout
-        self._async = async
+        self._is_async = is_async
+        if 'async' in kwargs:
+            self._is_async = kwargs['async']
+            warnings.warn('The `async` keyword is deprecated. '
+                          'Use `is_async` instead', DeprecationWarning)
+
         self._jobs = []
         self._exception_handlers = []
         self._queue_instances = {}
@@ -174,8 +182,8 @@ class RQ(object):
         #: Whether or not to run RQ jobs asynchronously or not,
         #: defaults to asynchronous
         _async = app.config.setdefault('RQ_ASYNC', True)
-        if self._async is None:
-            self._async = _async
+        if self._is_async is None:
+            self._is_async = _async
 
         # register extension with app
         app.extensions = getattr(app, 'extensions', {})
@@ -349,7 +357,7 @@ class RQ(object):
             queue = queue_cls(
                 name=name,
                 default_timeout=self.default_timeout,
-                async=self._async,
+                is_async=self._is_async,
                 connection=self.connection,
                 job_class=self.job_class
             )
