@@ -61,7 +61,7 @@ setup(
     install_requires=[
         'Flask>=0.10',
         'rq>=0.12.0',
-        'rq-scheduler>=0.8.2',
+        'rq-scheduler>=0.8.3',
     ],
     extras_require=extras_require,
     tests_require=tests_require,

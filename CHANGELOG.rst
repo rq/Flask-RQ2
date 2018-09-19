@@ -6,13 +6,32 @@ https://img.shields.io/badge/calver-YY.0M.MICRO-22bfda.svg
 Flask-RQ2 follows the `CalVer <http://calver.org/>`_ version specification
 in the form of::
 
-  YY.Minor[.Micro]
+  YY.MINOR[.MICRO]
 
 E.g.::
 
   16.1.1
 
+The ``MINOR`` number is **not** the month of the year. The ``MICRO`` number
+is a patch level for ``YY.MINOR`` releases and must *not* be specified for
+inital ``MINOR`` releases such as ``18.0`` or ``19.2``.
+
 .. snip
+
+18.1 (2018-09-19)
+~~~~~~~~~~~~~~~~~
+
+- Requires rq >= 0.12.0 and rq-scheduler >= 0.8.3 now.
+
+- Fixes imcompatibility with the new rq 0.12.0 release with which the
+  ``flask rq worker`` command would raise an error because of changes
+  in handling of the ``worker_ttl`` parameter defaults.
+
+- Added support for Python 3.7. Since 'async' is a keyword in Python 3.7,
+  `RQ(async=True)` has been changed to `RQ(is_async=True)`. The `async`
+  keyword argument will still work, but raises a `DeprecationWarning`.
+
+- Documentation fixes.
 
 18.0 (2018-03-02)
 ~~~~~~~~~~~~~~~~~
