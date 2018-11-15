@@ -202,9 +202,56 @@ Commands
 ~~~~~~~~
 
 There isn't an official overview of CLI commands in the RQ documentation,
-but these are the commands that Flask-RQ2 support.
+but these are the commands that Flask-RQ2 support::
 
-- ``worker`` -- Starts an `RQ worker`_ (required to run jobs).
+   export FLASK_APP='app.py'
+
+
+Setup the `cli.py`
+
+
+.. code-block:: python
+
+    from .rq import rq
+
+    def register(app):
+        rq.init_cli(app)
+
+        # anothers cli commands...
+        @app.cli.command()
+        @click.argument('name')
+        def create_user(name):
+            '''This commands create an user'''
+            print('create')
+
+
+In your `app.py` call the create factory above
+
+
+.. code-block:: python
+
+    #...
+
+    # Apps
+    from apps import create_app, cli
+
+    # ...
+    app = create_app(getenv('FLASK_ENV'))
+    cli.register(app)
+
+    if __name__ == '__main__':
+        app.run(host=ip, debug=debug, port=port, use_reloader=debug)
+
+
+Then show the helps::
+
+    flask rq
+
+
+- ``worker`` -- Starts an `RQ worker`_ (required to run jobs)::
+
+    flask run worker
+
 
 - ``scheduler`` -- Starts an `RQ Scheduler`_ (optional for scheduled jobs).
 
@@ -212,7 +259,23 @@ but these are the commands that Flask-RQ2 support.
 
 - ``empty`` -- Empty the given `RQ queues`_.
 
-- ``requeue`` -- Requeues `failed jobs`_.
+- ``requeue`` -- Requeues `failed jobs`_
+
+Parameters::
+
+    --all or -a Requeue all failed jobs
+
+
+Run the command to execute all jobs::
+
+    $ flask rq requeue --all
+    Requeueing 1 jobs from failed queue
+
+
+Or you can run a list of job ids::
+
+    $ flask rq requeue bb43879f-b0e2-4bf0-b6c5-4debf925180e cba947e8-5a95-45a5-b63d-2857799006e8
+
 
 - ``suspend`` -- Suspends all workers.
 
@@ -255,7 +318,7 @@ The default queues that the worker and CLI commands (``empty``, ``info`` and
 
 .. code-block:: python
 
-    app.config['RQ_QUEUES'] = ['default']
+    app.config['RQ_QUEUES'] = ['default', 'failed']
 
 ``RQ_ASYNC``
 ~~~~~~~~~~~~
