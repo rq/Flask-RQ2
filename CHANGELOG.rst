@@ -18,6 +18,18 @@ inital ``MINOR`` releases such as ``18.0`` or ``19.2``.
 
 .. snip
 
+18.2 (2018-11-29)
+~~~~~~~~~~~~~~~~~
+
+- Require redis-py < 3.0.0 as long as RQ hasn't been made compatible to
+  that version. Please don't update redis-py to 3.x yet, it will break
+  using RQ.
+
+  More infos:
+
+  - https://github.com/rq/rq/issues/1014
+  - https://github.com/rq/Flask-RQ2/issues/75
+
 18.1 (2018-09-19)
 ~~~~~~~~~~~~~~~~~
 
