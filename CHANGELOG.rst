@@ -30,6 +30,8 @@ inital ``MINOR`` releases such as ``18.0`` or ``19.2``.
   - https://github.com/rq/rq/issues/1014
   - https://github.com/rq/Flask-RQ2/issues/75
 
+- Require rq < 0.13.0 to cater to a possible Redis 3.0.0 compatible version.
+
 18.1 (2018-09-19)
 ~~~~~~~~~~~~~~~~~
 
