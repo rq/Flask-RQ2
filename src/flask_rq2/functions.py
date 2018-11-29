@@ -72,9 +72,9 @@ class JobFunctions(object):
 
             add.queue(1, 2, timeout=30)
 
-        :param \*args: The positional arguments to pass to the queued job.
+        :param \\*args: The positional arguments to pass to the queued job.
 
-        :param \*\*kwargs: The keyword arguments to pass to the queued job.
+        :param \\*\\*kwargs: The keyword arguments to pass to the queued job.
 
         :param queue: Name of the queue to queue in, defaults to
                       queue of of job or :attr:`~flask_rq2.RQ.default_queue`.
@@ -151,9 +151,9 @@ class JobFunctions(object):
             add.schedule(datetime(2016, 12, 31, 23, 59, 59), 1, 2)
             add.schedule(timedelta(days=14), 1, 2, repeat=1)
 
-        :param \*args: The positional arguments to pass to the queued job.
+        :param \\*args: The positional arguments to pass to the queued job.
 
-        :param \*\*kwargs: The keyword arguments to pass to the queued job.
+        :param \\*\\*kwargs: The keyword arguments to pass to the queued job.
 
         :param queue: Name of the queue to queue in, defaults to
                       queue of of job or :attr:`~flask_rq2.RQ.default_queue`.
@@ -230,9 +230,9 @@ class JobFunctions(object):
 
             add.cron('* * * * *', 'add-some-numbers', 1, 2, timeout=10)
 
-        :param \*args: The positional arguments to pass to the queued job.
+        :param \\*args: The positional arguments to pass to the queued job.
 
-        :param \*\*kwargs: The keyword arguments to pass to the queued job.
+        :param \\*\\*kwargs: The keyword arguments to pass to the queued job.
 
         :param pattern: A Crontab pattern.
         :type pattern: str

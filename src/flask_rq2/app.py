@@ -372,8 +372,8 @@ class RQ(object):
             default_worker = rq.get_worker('default')
             default_low_worker = rq.get_worker('default', 'low')
 
-        :param \*queues: Names of queues the worker should act on, falls back
-                         to the configured queues.
+        :param \\*queues: Names of queues the worker should act on, falls back
+                          to the configured queues.
         """
         if not queues:
             queues = self.queues
