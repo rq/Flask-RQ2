@@ -221,6 +221,30 @@ but these are the commands that Flask-RQ2 support.
 Please call each command with the ``--help`` option to learn more about their
 required and optional paramaters.
 
+Unit Testing
+------------
+
+To use Flask-RQ2 in unit tests, set the variable ``RQ_CONNECTION_CLASS = 'fakeredis.FakeStrictRedis'``. The *fakeredis* module is required and can be installed with ``pip install fakeredis``. Excerpts of how this can be integrated into a Flask app are shown below.
+
+.. code-block:: python
+
+    # config.py
+
+    class Config:
+        APP_NAME = os.environ.get('APP_NAME')
+        RQ_CONNECTION_CLASS = 'fakeredis.FakeStrictRedis'
+
+.. code-block:: python
+
+    # app/__init__.py
+
+    rq = RQ()
+
+    def create_app(config_name):
+        app = Flask(__name__)
+        app.config.from_object(config[config_name])
+        rq.init_app(app)
+
 Configuration
 -------------
 
