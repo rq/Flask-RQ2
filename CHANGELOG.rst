@@ -18,6 +18,12 @@ inital ``MINOR`` releases such as ``18.0`` or ``19.2``.
 
 .. snip
 
+18.3 (2018-12-20)
+~~~~~~~~~~~~~~~~~
+
+- **IMPORTANT!** Reqires redis-py >= 3.0 since RQ and rq-scheduler have
+  switched to that requirement. Please upgrade as soon as possible.
+
 18.2.2 (2018-12-20)
 ~~~~~~~~~~~~~~~~~~~
 
@@ -27,7 +33,7 @@ inital ``MINOR`` releases such as ``18.0`` or ``19.2``.
 18.2, 18.2.1 (2018-11-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Require redis-py < 3.0.0 as long as RQ hasn't been made compatible to
+- Requires redis-py < 3.0.0 as long as RQ hasn't been made compatible to
   that version. Please don't update redis-py to 3.x yet, it will break
   using RQ.
 
