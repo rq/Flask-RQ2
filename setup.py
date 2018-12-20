@@ -12,8 +12,8 @@ with codecs.open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 tests_require = [
     'pytest',
-    'redis<3.0.0',
-    'rq-scheduler>=0.8.3,<0.9.0',
+    'redis>3.0.0',
+    'rq-scheduler>=0.9.0',
     'flask-cli>=0.4.0',
     'pytest>=2.8.0',
     'pytest-cache>=1.0',
@@ -60,9 +60,9 @@ setup(
     setup_requires=['setuptools_scm'] + pytest_runner,
     install_requires=[
         'Flask>=0.10',
-        'rq>=0.12.0,<0.13.0',
-        'redis<3.0.0',
-        'rq-scheduler>=0.8.3,<0.9.0',
+        'rq>=0.13.0',
+        'redis>=3.0.0',
+        'rq-scheduler>=0.9.0',
     ],
     extras_require=extras_require,
     tests_require=tests_require,
