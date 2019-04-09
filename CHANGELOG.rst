@@ -18,6 +18,13 @@ inital ``MINOR`` releases such as ``18.0`` or ``19.2``.
 
 .. snip
 
+Unreleased
+~~~~~~~~~~
+- Add support for ``--disable-default-exception-handler`` option when
+  starting a worker to disable RQ's default exception handler.
+
+  **Requires rq 1.0 or higher.**
+
 18.3 (2018-12-20)
 ~~~~~~~~~~~~~~~~~
 
