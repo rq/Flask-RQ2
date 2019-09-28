@@ -135,7 +135,7 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.argument('queues', nargs=-1)
 @rq_command()
 def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
-           worker_ttl, verbose, quiet, sentry_dsn, exception_handler, pid,
+           worker_ttl, verbose, quiet, max_jobs, sentry_dsn, exception_handler, pid,
            queues):
     "Starts an RQ worker."
     ctx.invoke(
