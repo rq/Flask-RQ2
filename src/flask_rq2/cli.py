@@ -128,6 +128,7 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.option('--sentry-dsn', default=None, help='Sentry DSN address')
 @click.option('--exception-handler', help='Exception handler(s) to use',
               multiple=True)
+@click.option('--max-jobs', type=int, default=None, help='Maximum number of jobs to execute')
 @click.option('--pid',
               help='Write the process ID number to a file at '
                    'the specified path')
@@ -147,6 +148,7 @@ def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
         worker_ttl=worker_ttl,
         verbose=verbose,
         quiet=quiet,
+        max_jobs=max_jobs,
         sentry_dsn=sentry_dsn,
         exception_handler=exception_handler or rq._exception_handlers,
         pid=pid,
