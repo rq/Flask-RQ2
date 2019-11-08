@@ -37,5 +37,8 @@ class FlaskJob(Job):
         return app
 
     def perform(self):
+        if current_app:
+            return super(FlaskJob, self).perform()
         self.load_app()
-        return super(FlaskJob, self).perform()
+        with app.app_context():
+            return super(FlaskJob, self).perform()
