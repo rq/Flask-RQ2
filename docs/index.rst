@@ -80,7 +80,7 @@ timespan or by a cron-like plan:
     add.schedule(timedelta(hours=12), 1, 2, queue='high', timeout=60 * 2)
 
     # queue job every day at noon (UTC!)
-    add.cron('0 0 12 * * ?', 'add-one-two', 1, 2)
+    add.cron('0 12 * * *', 'add-one-two', 1, 2)
 
     # queue job every minute with a different queue
     add.cron('* * * * *', 'add-one-two', 1, 2, queue='high', timeout=55)
