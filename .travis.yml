@@ -4,8 +4,9 @@ services:
 - redis-server
 python:
 - "2.7"
-- "3.5"
 - "3.6"
+- "3.7"
+- "3.8"
 before_install:
 - python --version
 - uname -a
@@ -29,11 +30,6 @@ notifications:
     on_failure: always
 jobs:
   include:
-    # Python 3.7 in Travis: https://github.com/travis-ci/travis-ci/issues/9815
-    - python: 3.7
-      dist: xenial
-      sudo: true
-
     - stage: deploy
       install: skip
       script: skip
