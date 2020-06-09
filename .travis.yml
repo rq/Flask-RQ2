@@ -13,6 +13,7 @@ before_install:
 - lsb_release -a
 cache: pip
 install:
+- pip install -U pip setuptools virtualenv wheel
 - pip install codecov tox-travis
 - virtualenv --version
 - pip --version
