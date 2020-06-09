@@ -14,8 +14,8 @@ tests_require = [
     "redis>3.0.0",
     "rq-scheduler>=0.9.0",
     "flask-cli>=0.4.0",
-    "pytest<5.0.0 ; python_version < '3.0'"
-    "pytest>=5.0.0 ; python_version >= '3.0'"
+    "pytest<5.0.0 ; python_version < '3.0'",
+    "pytest>=5.0.0 ; python_version >= '3.0'",
     "pytest-cache>=1.0",
     "pytest-flake8>=0.5",
     "pytest-wholenodeid",
@@ -24,8 +24,8 @@ tests_require = [
 ]
 
 extras_require = {
-    "docs": ["Sphinx>=1.4",],
-    "cli": ["Flask-CLI>=0.4.0",],
+    "docs": ["Sphinx>=1.4"],
+    "cli": ["Flask-CLI>=0.4.0"],
     "tests": tests_require,
 }
 
