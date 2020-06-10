@@ -28,14 +28,7 @@ class FlaskJob(Job):
         super(FlaskJob, self).__init__(*args, **kwargs)
         self.script_info = ScriptInfo()
 
-    def load_app(self):
-        if current_app:
-            app = current_app
-        else:
-            app = self.script_info.load_app()
-        return app
-
     def perform(self):
-        app = self.load_app()
+        app = self.script_info.load_app()
         with app.app_context():
             return super(FlaskJob, self).perform()
