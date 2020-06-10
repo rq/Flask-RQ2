@@ -15,7 +15,7 @@ except ImportError:  # pragma: no cover
     try:
         from flask_cli import ScriptInfo
     except ImportError:
-        raise RuntimeError('Cannot import Flask CLI. Is it installed?')
+        raise RuntimeError("Cannot import Flask CLI. Is it installed?")
 
 
 class FlaskJob(Job):
@@ -24,6 +24,7 @@ class FlaskJob(Job):
     context. This requires setting the ``FLASK_APP`` environment
     variable.
     """
+
     def __init__(self, *args, **kwargs):
         super(FlaskJob, self).__init__(*args, **kwargs)
         self.script_info = ScriptInfo()
@@ -36,6 +37,8 @@ class FlaskJob(Job):
         return app
 
     def perform(self):
-        app = self.load_app()
+        if current_app:
+            return super(FlaskJob, self).perform()
+        self.load_app()
         with app.app_context():
             return super(FlaskJob, self).perform()
