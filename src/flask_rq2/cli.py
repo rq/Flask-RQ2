@@ -131,11 +131,13 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.option('--pid',
               help='Write the process ID number to a file at '
                    'the specified path')
+@click.option('--disable-default-exception-handler', '-d', is_flag=True,
+              help='Disable RQ\'s default exception handler')
 @click.argument('queues', nargs=-1)
 @rq_command()
 def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
            worker_ttl, verbose, quiet, sentry_dsn, exception_handler, pid,
-           queues):
+           disable_default_exception_handler, queues):
     "Starts an RQ worker."
     ctx.invoke(
         rq_cli.worker,
@@ -151,6 +153,7 @@ def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
         exception_handler=exception_handler or rq._exception_handlers,
         pid=pid,
         queues=queues or rq.queues,
+        disable_default_exception_handler=disable_default_exception_handler,
         **shared_options(rq)
     )
 
