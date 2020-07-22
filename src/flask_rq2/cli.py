@@ -126,6 +126,8 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
 @click.option('--quiet', '-q', is_flag=True, help='Show less output')
 @click.option('--sentry-dsn', default=None, help='Sentry DSN address')
+@click.option('--log-format', default='%(asctime)s %(message)s', help='Format for the worker logs')
+@click.option('--date-format', default='%H:%M:%S', help='Datetime format for the worker logs')
 @click.option('--exception-handler', help='Exception handler(s) to use',
               multiple=True)
 @click.option('--pid',
@@ -134,7 +136,7 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.argument('queues', nargs=-1)
 @rq_command()
 def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
-           worker_ttl, verbose, quiet, sentry_dsn, exception_handler, pid,
+           worker_ttl, verbose, quiet, sentry_dsn, log_format, date_format, exception_handler, pid,
            queues):
     "Starts an RQ worker."
     ctx.invoke(
@@ -148,12 +150,13 @@ def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
         verbose=verbose,
         quiet=quiet,
         sentry_dsn=sentry_dsn,
+        log_format=log_format,
+        date_format=date_format,
         exception_handler=exception_handler or rq._exception_handlers,
         pid=pid,
         queues=queues or rq.queues,
         **shared_options(rq)
     )
-
 
 @rq_command()
 @click.option('--duration', type=int,
