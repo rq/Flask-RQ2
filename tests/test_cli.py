@@ -61,7 +61,7 @@ def test_worker_command(config, rq_cli_app, cli_runner, caplog):
     obj = ScriptInfo(create_app=lambda info: rq_cli_app)
     result = cli_runner.invoke(rq_cli_app.cli,
                                args=['rq', 'worker', '--burst',
-                                     '--worker-ttl', '10'],
+                                     '--worker-ttl', '10', '--disable-job-desc-logging'],
                                obj=obj)
     assert result.exit_code == 0
     out = caplog.text
