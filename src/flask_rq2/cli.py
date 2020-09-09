@@ -123,6 +123,7 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
               help='Default results timeout to be used')
 @click.option('--worker-ttl', type=int, default=DEFAULT_WORKER_TTL,
               help='Default worker timeout to be used (default: 420)')
+@click.option('--disable-job-desc-logging', is_flag=True, help='Turn off description logging.')
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
 @click.option('--quiet', '-q', is_flag=True, help='Show less output')
 @click.option('--sentry-dsn', default=None, help='Sentry DSN address')
@@ -134,7 +135,7 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.argument('queues', nargs=-1)
 @rq_command()
 def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
-           worker_ttl, verbose, quiet, sentry_dsn, exception_handler, pid,
+           worker_ttl, disable_job_desc_logging, verbose, quiet, sentry_dsn, exception_handler, pid,
            queues):
     "Starts an RQ worker."
     ctx.invoke(
@@ -145,6 +146,7 @@ def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
         path=path,
         results_ttl=results_ttl,
         worker_ttl=worker_ttl,
+        disable_job_desc_logging=disable_job_desc_logging,
         verbose=verbose,
         quiet=quiet,
         sentry_dsn=sentry_dsn,
