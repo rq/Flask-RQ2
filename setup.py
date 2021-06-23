@@ -27,7 +27,7 @@ setup(
     install_requires=[
         "Flask>=0.10",
         "rq>=0.13.0",
-        "redis>=3.0.0",
+        "redis>=2.10.6",
         "rq-scheduler>=0.9.0",
     ],
     extras_require={
