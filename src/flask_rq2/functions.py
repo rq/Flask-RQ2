@@ -15,7 +15,7 @@ class JobFunctions(object):
     functions = ['queue', 'schedule', 'cron']
 
     def __init__(self, rq, wrapped, queue_name, timeout, result_ttl, ttl,
-                 depends_on, at_front, meta, description, on_success, on_failure):
+                 depends_on, at_front, meta, description, on_success, on_failure, retry):
         self.rq = rq
         self.wrapped = wrapped
         self._queue_name = queue_name
@@ -30,6 +30,7 @@ class JobFunctions(object):
         self._description = description
         self._on_success = on_success
         self._on_failure = on_failure
+        self._retry = retry
 
     def __repr__(self):
         full_name = '.'.join([self.wrapped.__module__, self.wrapped.__name__])
@@ -108,11 +109,14 @@ class JobFunctions(object):
 
         :param on_success: A callback when the job suceeds. Defaults
                            to None
-        :type job_id: Callable
+        :type on_success: Callable
 
         :param on_failure: A callback when the job fails. Defaults
                            to None
-        :type job_id: Callable
+        :type on_failure: Callable
+
+        :param retry: A Retry() object that specifies how the job should be retried on failure.
+        :type retry: rq.job.Retry
 
         :param at_front: Whether or not the job is queued in front of all other
                          enqueued jobs.
@@ -136,6 +140,7 @@ class JobFunctions(object):
         description = kwargs.pop('description', self._description)
         on_success = kwargs.pop('on_success', self._on_success)
         on_failure = kwargs.pop('on_failure', self._on_failure)
+        retry = kwargs.pop('retry', self._retry)
         return self.rq.get_queue(queue_name).enqueue_call(
             self.wrapped,
             args=args,
@@ -150,6 +155,7 @@ class JobFunctions(object):
             description=description,
             on_success=on_success,
             on_failure=on_failure,
+            retry=retry
         )
 
     def schedule(self, time_or_delta, *args, **kwargs):
