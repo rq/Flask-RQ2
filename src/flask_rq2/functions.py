@@ -15,7 +15,7 @@ class JobFunctions(object):
     functions = ['queue', 'schedule', 'cron']
 
     def __init__(self, rq, wrapped, queue_name, timeout, result_ttl, ttl,
-                 depends_on, at_front, meta, description):
+                 depends_on, at_front, meta, description, on_success, on_failure, retry):
         self.rq = rq
         self.wrapped = wrapped
         self._queue_name = queue_name
@@ -28,6 +28,9 @@ class JobFunctions(object):
         self._at_front = at_front
         self._meta = meta
         self._description = description
+        self._on_success = on_success
+        self._on_failure = on_failure
+        self._retry = retry
 
     def __repr__(self):
         full_name = '.'.join([self.wrapped.__module__, self.wrapped.__name__])
@@ -104,6 +107,17 @@ class JobFunctions(object):
                        :mod:`UUID <uuid>`.
         :type job_id: str
 
+        :param on_success: A callback when the job suceeds. Defaults
+                           to None
+        :type on_success: Callable
+
+        :param on_failure: A callback when the job fails. Defaults
+                           to None
+        :type on_failure: Callable
+
+        :param retry: A Retry() object that specifies how the job should be retried on failure.
+        :type retry: rq.job.Retry
+
         :param at_front: Whether or not the job is queued in front of all other
                          enqueued jobs.
         :type at_front: bool
@@ -124,6 +138,9 @@ class JobFunctions(object):
         at_front = kwargs.pop('at_front', self._at_front)
         meta = kwargs.pop('meta', self._meta)
         description = kwargs.pop('description', self._description)
+        on_success = kwargs.pop('on_success', self._on_success)
+        on_failure = kwargs.pop('on_failure', self._on_failure)
+        retry = kwargs.pop('retry', self._retry)
         return self.rq.get_queue(queue_name).enqueue_call(
             self.wrapped,
             args=args,
@@ -136,6 +153,9 @@ class JobFunctions(object):
             at_front=at_front,
             meta=meta,
             description=description,
+            on_success=on_success,
+            on_failure=on_failure,
+            retry=retry
         )
 
     def schedule(self, time_or_delta, *args, **kwargs):

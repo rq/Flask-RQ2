@@ -224,7 +224,8 @@ class RQ(object):
         return callback
 
     def job(self, func_or_queue=None, timeout=None, result_ttl=None, ttl=None,
-            depends_on=None, at_front=None, meta=None, description=None):
+            depends_on=None, at_front=None, meta=None, description=None,
+            on_success=None, on_failure=None, retry=None):
         """
         Decorator to mark functions for queuing via RQ, e.g.::
 
@@ -274,6 +275,16 @@ class RQ(object):
         :param description: Description of the job.
         :type description: str
 
+        :param on_success: Callback when job success.
+        :type on_success: Callable
+
+        :param on_failure: Callback when job fails.
+        :type on_failure: Callable
+
+        :param retry: A Retry() object that specifies how the job should be retried on failure.
+        :type retry: rq.job.Retry
+
+
         """
         if callable(func_or_queue):
             func = func_or_queue
@@ -295,6 +306,9 @@ class RQ(object):
                 at_front=at_front,
                 meta=meta,
                 description=description,
+                on_success=on_success,
+                on_failure=on_failure,
+                retry=retry,
             )
             wrapped.helper = helper
             for function in helper.functions:
