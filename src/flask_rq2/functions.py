@@ -195,6 +195,7 @@ class JobFunctions(object):
         timeout = kwargs.pop('timeout', self.timeout)
         description = kwargs.pop('description', None)
         result_ttl = kwargs.pop('result_ttl', self.result_ttl)
+        depends_on = kwargs.pop('depends_on', self._depends_on)
         ttl = kwargs.pop('ttl', self.ttl)
         repeat = kwargs.pop('repeat', None)
         interval = kwargs.pop('interval', None)
@@ -205,19 +206,22 @@ class JobFunctions(object):
         else:
             time = time_or_delta
 
-        return self.rq.get_scheduler().schedule(
-            time,
+        if isinstance(time_or_delta, timedelta):
+            enqueue_func = self.rq.get_queue(queue_name).enqueue_in
+        else:
+            enqueue_func = self.rq.get_queue(queue_name).enqueue_at
+
+        return enqueue_func(
+            time_or_delta,
             self.wrapped,
             args=args,
             kwargs=kwargs,
-            interval=interval,
-            repeat=repeat,
+            timeout=timeout,
             result_ttl=result_ttl,
             ttl=ttl,
-            timeout=timeout,
-            id=job_id,
+            depends_on=depends_on,
+            job_id=job_id,
             description=description,
-            queue_name=queue_name,
         )
 
     def cron(self, pattern, name, *args, **kwargs):

@@ -6,12 +6,12 @@
     The Flask application aware RQ scheduler class.
 
 """
-from rq_scheduler.scheduler import Scheduler
+from rq.scheduler import RQScheduler
 
 from .job import FlaskJob
 
 
-class FlaskScheduler(Scheduler):
+class FlaskScheduler(RQScheduler):
     """
     The RQ Queue class that uses our Job class to
     be able to use Flask app context inside of jobs.
