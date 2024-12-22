@@ -13,7 +13,9 @@
 # serve to show the default.
 import sys
 import os
-from pkg_resources import get_distribution
+# from pkg_resources import get_distribution
+from importlib.metadata import version
+
 
 import sphinx_readable_theme
 
@@ -59,7 +61,7 @@ author = u'Jannis Leidel'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-release = get_distribution('Flask-RQ2').version
+release = version('Flask-RQ2')
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
 
