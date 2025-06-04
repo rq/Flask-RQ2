@@ -11,7 +11,7 @@ import os
 from functools import update_wrapper
 
 import click
-from rq.cli import cli as rq_cli
+from rq.cli import workers as rq_cli
 from rq.defaults import DEFAULT_RESULT_TTL, DEFAULT_WORKER_TTL
 
 

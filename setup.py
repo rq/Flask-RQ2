@@ -26,7 +26,7 @@ setup(
     setup_requires=["setuptools_scm"],
     install_requires=[
         "Flask>=0.10",
-        "rq>=0.13.0",
+        "rq>=2.3.3",
         "redis>=3.0.0",
         "rq-scheduler>=0.9.0",
     ],
