@@ -8,14 +8,17 @@
     :copyright: (c) 2016 by Jannis Leidel.
     :license: MIT, see LICENSE for more details.
 """
-from pkg_resources import get_distribution, DistributionNotFound
+from importlib.metadata import version, PackageNotFoundError
 
 from .app import RQ  # noqa
 
+def get_distribution(pkg_name):
+    try:
+        return version(pkg_name)
+    except PackageNotFoundError:
+        return None
+
 __author__ = 'Jannis Leidel'
 
-try:
-    __version__ = get_distribution(__name__).version
-except DistributionNotFound:
-    # package is not installed
-    pass
+__version__ = get_distribution(__name__)
+
